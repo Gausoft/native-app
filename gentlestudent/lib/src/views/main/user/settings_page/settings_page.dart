@@ -8,7 +8,7 @@ import 'package:gentlestudent/src/blocs/participation_bloc.dart';
 import 'package:gentlestudent/src/constants/color_constants.dart';
 import 'package:gentlestudent/src/views/authentication/widgets/app_bar.dart';
 import 'package:gentlestudent/src/views/main/user/settings_page/widgets/change_profile_picture_dialog.dart';
-import 'package:gentlestudent/src/views/main/user/settings_page/widgets/location_permission_dialog.dart';
+// import 'package:gentlestudent/src/views/main/user/settings_page/widgets/location_permission_dialog.dart';
 import 'package:gentlestudent/src/views/main/user/settings_page/widgets/sign_out_dialog.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -72,10 +72,10 @@ class _SettingsPageState extends State<SettingsPage> {
             (bool value) => _changeTheme(value),
             true,
           ),
-          settingsListTile(
-            "Sta locatie altijd toe",
-            () => showLocationPermissionDialog(context),
-          ),
+          // settingsListTile(
+          //   "Sta locatie altijd toe",
+          //   () => showLocationPermissionDialog(context),
+          // ),
           settingsListTile(
             "Meld af",
             () => showSignOutDialog(
