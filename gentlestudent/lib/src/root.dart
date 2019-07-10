@@ -6,6 +6,7 @@ import 'package:gentlestudent/src/blocs/opportunity_bloc.dart';
 import 'package:gentlestudent/src/blocs/opportunity_navigation_bloc.dart';
 import 'package:gentlestudent/src/blocs/participant_bloc.dart';
 import 'package:gentlestudent/src/blocs/participation_bloc.dart';
+import 'package:gentlestudent/src/services/location_service.dart';
 import 'package:gentlestudent/src/views/authentication/login_page.dart';
 import 'package:gentlestudent/src/views/main/main_page.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
         Provider(builder: (context) => ParticipantBloc()),
         Provider(builder: (context) => AssertionBloc()),
         Provider(builder: (context) => ParticipationBloc()),
+        StreamProvider(builder: (context) => LocationService().locationStream),
       ],
       child: DynamicTheme(
         defaultBrightness: Brightness.light,

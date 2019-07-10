@@ -57,6 +57,9 @@ dependencies:
   # Used for dark theme.
   dynamic_theme: ^1.0.0
 
+  # Used to get additional icons.
+  font_awesome_flutter: ^8.0.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
