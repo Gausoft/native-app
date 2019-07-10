@@ -48,6 +48,9 @@ dependencies:
   # Used for the map.
   flutter_map: ^0.6.1+2
 
+  # Used to get the location of the user.
+  location: ^2.3.5
+
   # Used for taking pictures and using the gallery of a user.
   image_picker: ^0.6.0+11
 
