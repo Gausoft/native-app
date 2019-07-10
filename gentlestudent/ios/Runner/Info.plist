@@ -11,7 +11,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>gentlestudent</string>
+	<string>Gentlestudent</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -21,9 +21,9 @@
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app requires access to your location to discover learning opportunities near you.</string>
+	<string>We hebben je locatie nodig om meldingen te sturen van leerkansen in de buurt.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>This app requires access to your location to discover learning opportunities near you.</string>
+	<string>We hebben je locatie nodig om meldingen te sturen van leerkansen in de buurt.</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
