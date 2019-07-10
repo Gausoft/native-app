@@ -1,0 +1,74 @@
+name: gentlestudent
+description: A new Flutter project.
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.2.2 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^0.1.2
+
+  # Used for dependency injection (BLoC).
+  provider: ^3.0.0+1
+
+  # Used for additional features for Streams (BLoC).
+  rxdart: ^0.22.0
+
+  # Used to open links in a browser application of the user's smartphone.
+  url_launcher: ^5.0.3
+
+  # Used for the tutorial of the app.
+  intro_views_flutter: ^2.6.0
+
+  # Used for Firebase.
+  firebase_core: ^0.4.0+6
+
+  # Used to access the Firebase Firestore database.
+  cloud_firestore: ^0.12.5+2
+
+  # Used for Firebase authentication.
+  firebase_auth: ^0.11.1+7
+
+  # Used to access the storage of the Firebase.
+  firebase_storage: ^3.0.2
+
+  # Used to cache images that come from the internet.
+  cached_network_image: ^0.8.0
+
+  # Used for caching data.
+  sqflite: ^1.1.6+1
+
+  # User for date formatting.
+  intl: ^0.15.8
+
+  # Used for the map.
+  flutter_map: ^0.6.1+2
+
+  # Used for taking pictures and using the gallery of a user.
+  image_picker: ^0.6.0+11
+
+  # Used for dark theme.
+  dynamic_theme: ^1.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+
+  assets:
+  - assets/images/logo/gentlestudent_logo.png
+
+  - assets/images/tutorial/beacon.png
+  - assets/images/tutorial/bluetooth.png
+  - assets/images/tutorial/challenge.png
+
+  fonts:
+    - family: NeoSansPro
+      fonts:
+        - asset: assets/fonts/NeoSansPro-Regular.otf

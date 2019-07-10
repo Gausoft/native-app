@@ -1,0 +1,91 @@
+{
+  "project_info": {
+    "project_number": "52934623602",
+    "firebase_url": "https://gentle-student.firebaseio.com",
+    "project_id": "gentle-student",
+    "storage_bucket": "gentle-student.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:52934623602:android:265960dcf9b832ce",
+        "android_client_info": {
+          "package_name": "com.example.gentlestudent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "52934623602-fhu7ivteuprkeq58qaub7vt1begg9onn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gentlestudent",
+            "certificate_hash": "291a43fac09e7cb0256180548815f9d1daefac07"
+          }
+        },
+        {
+          "client_id": "52934623602-irp3cgdamfr8lhujuh9clsj76j18l3r3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCo0tnsPsE_E12_u6Zy_tcLAchDtfardLY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "52934623602-irp3cgdamfr8lhujuh9clsj76j18l3r3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "52934623602-emd089q2pgrnalk81u29o9eodel9h6tj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "gent.gentlestudent.gentlestudent"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:52934623602:android:e365544172319ad3",
+        "android_client_info": {
+          "package_name": "gent.gentlestudent.gentlestudent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "52934623602-irp3cgdamfr8lhujuh9clsj76j18l3r3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCo0tnsPsE_E12_u6Zy_tcLAchDtfardLY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "52934623602-irp3cgdamfr8lhujuh9clsj76j18l3r3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "52934623602-emd089q2pgrnalk81u29o9eodel9h6tj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "gent.gentlestudent.gentlestudent"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>52934623602-emd089q2pgrnalk81u29o9eodel9h6tj.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.52934623602-emd089q2pgrnalk81u29o9eodel9h6tj</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>52934623602-fhu7ivteuprkeq58qaub7vt1begg9onn.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAKaZhQmNf9bGosMtl4lMxyqKlsMqmZUgo</string>
+	<key>GCM_SENDER_ID</key>
+	<string>52934623602</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>gent.gentlestudent.gentlestudent</string>
+	<key>PROJECT_ID</key>
+	<string>gentle-student</string>
+	<key>STORAGE_BUCKET</key>
+	<string>gentle-student.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:52934623602:ios:e365544172319ad3</string>
+	<key>DATABASE_URL</key>
+	<string>https://gentle-student.firebaseio.com</string>
+</dict>
+</plist>
