@@ -12,11 +12,20 @@ class OpportunitiesListPage extends StatelessWidget {
 
     return Container(
       child: StreamBuilder(
-        stream: _opportunityBloc.opportunities,
+        stream: _opportunityBloc.filteredOpportunities,
         builder:
             (BuildContext context, AsyncSnapshot<List<Opportunity>> snapshot) {
           if (!snapshot.hasData) {
             return loadingSpinner();
+          }
+
+          if (snapshot.data.isEmpty) {
+            return Container(
+              padding: EdgeInsets.all(24),
+              child: Center(
+                child: Text("Er zijn momenteel geen leerkansen beschikbaar"),
+              ),
+            );
           }
 
           return ListView.builder(

@@ -1,5 +1,7 @@
 import 'package:gentlestudent/src/models/address.dart';
 import 'package:gentlestudent/src/models/badge.dart';
+import 'package:gentlestudent/src/models/enums/category.dart';
+import 'package:gentlestudent/src/models/enums/difficulty.dart';
 import 'package:gentlestudent/src/models/issuer.dart';
 import 'package:gentlestudent/src/models/opportunity.dart';
 import 'package:gentlestudent/src/repositories/address_repository.dart';
@@ -14,11 +16,21 @@ class OpportunityBloc {
   final _badgeRepository = BadgeRepository();
   final _issuerRepository = IssuerRepository();
   final _opportunities = BehaviorSubject<List<Opportunity>>();
+  final _filteredOpportunities = BehaviorSubject<List<Opportunity>>();
+  final _opportunityNameFilter = BehaviorSubject<String>();
+  final _categoryFilter = BehaviorSubject<Category>();
+  final _difficultyFilter = BehaviorSubject<Difficulty>();
 
   Stream<List<Opportunity>> get opportunities => _opportunities.stream;
+  Stream<List<Opportunity>> get filteredOpportunities => _filteredOpportunities.stream;
+  Stream<String> get opportunityNameFilter => _opportunityNameFilter.stream;
+  Stream<Category> get categoryFilter => _categoryFilter.stream;
+  Stream<Difficulty> get difficultyFilter => _difficultyFilter.stream;
 
-  Function(List<Opportunity>) get _changeOpportunities =>
-      _opportunities.sink.add;
+  Function(List<Opportunity>) get _changeOpportunities => _opportunities.sink.add;
+  Function(List<Opportunity>) get _changeFilteredOpportunities => _filteredOpportunities.sink.add;
+
+  String get opportunityNameFilterValue => _opportunityNameFilter.value;
 
   OpportunityBloc() {
     _fetchOpportunities();
@@ -26,7 +38,10 @@ class OpportunityBloc {
 
   Future _fetchOpportunities() async {
     List<Opportunity> opportunities = await _opportunitiesRepository.opportunities;
+    List<Opportunity> filteredOpportunities = opportunities;
+
     _changeOpportunities(opportunities);
+    _changeFilteredOpportunities(filteredOpportunities);
   }
 
   Future<Address> getAddressOfOpportunity(Opportunity opportunity) async {
@@ -53,7 +68,50 @@ class OpportunityBloc {
     return opportunity;
   }
 
+  void filterOpportunities() {
+    List<Opportunity> opportunities = _opportunities.value;
+    String opportunityName = _opportunityNameFilter.value;
+    Category category = _categoryFilter.value;
+    Difficulty difficulty = _difficultyFilter.value;
+
+    List<Opportunity> filteredOpportunities = [...opportunities];
+
+    if (opportunityName != null && opportunityName != "")
+      filteredOpportunities = filteredOpportunities
+          .where((o) => o.title.toLowerCase().contains(opportunityName.toLowerCase()))
+          .toList();
+    if (category != null)
+      filteredOpportunities = filteredOpportunities
+          .where((o) => o.category == category)
+          .toList();
+    if (difficulty != null)
+      filteredOpportunities = filteredOpportunities
+          .where((o) => o.difficulty == difficulty)
+          .toList();
+
+    _changeFilteredOpportunities(filteredOpportunities);
+  }
+
+  void changeOpportunityName(String name) {
+    _opportunityNameFilter.sink.add(name);
+    filterOpportunities();
+  }
+
+  void changeCategory(Category category) {
+    _categoryFilter.sink.add(category);
+    filterOpportunities();
+  }
+
+  void changeDifficulty(Difficulty difficulty) {
+    _difficultyFilter.sink.add(difficulty);
+    filterOpportunities();
+  }
+
   void dispose() {
     _opportunities.close();
+    _filteredOpportunities.close();
+    _opportunityNameFilter.close();
+    _categoryFilter.close();
+    _difficultyFilter.close();
   }
 }
