@@ -1,4 +1,5 @@
 import 'package:gentlestudent/src/models/enums/status.dart';
+import 'package:gentlestudent/src/models/opportunity.dart';
 import 'package:gentlestudent/src/models/participation.dart';
 import 'package:gentlestudent/src/repositories/participation_repository.dart';
 import 'package:rxdart/rxdart.dart';
@@ -18,6 +19,11 @@ class ParticipationBloc {
     List<Participation> participations = await _participationRepository.participations;
     _changeApprovedParticipations(participations.where((p) => p.status == Status.APPROVED).toList());
     _changeRequestedParticipations(participations.where((p) => p.status == Status.PENDING || p.status == Status.REFUSED).toList());
+  }
+
+  Future<Participation> fetchParticipationByOpportunity(Opportunity opportunity) async {
+    Participation participation = await _participationRepository.getParticipationByOpportunityId(opportunity.opportunityId);
+    return participation;
   }
 
   void onSignOut() {

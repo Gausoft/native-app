@@ -14,18 +14,6 @@ class ParticipationApi {
         .toList();
   }
 
-  Future<bool> participationExists(
-      FirebaseUser firebaseUser, Opportunity opportunity) async {
-    return (await Firestore.instance
-                .collection('Participations')
-                .where("participantId", isEqualTo: firebaseUser.uid)
-                .where("opportunityId", isEqualTo: opportunity.opportunityId)
-                .getDocuments())
-            .documents
-            .length !=
-        0;
-  }
-
   Future<void> updateParticipationAfterBadgeClaim(
       Participation participation, String message) async {
     Map<String, dynamic> data = <String, dynamic>{
@@ -41,14 +29,13 @@ class ParticipationApi {
     }).catchError((e) => print(e));
   }
 
-  Future<Participation> getParticipantByUserAndOpportunity(
-      FirebaseUser firebaseUser, Opportunity opportunity) async {
+  Future<Participation> getParticipationByOpportunityId(
+      FirebaseUser firebaseUser, String opportunityId) async {
     return Participation.fromDocumentSnapshot((await Firestore.instance
             .collection('Participations')
             .where("participantId", isEqualTo: firebaseUser.uid)
-            .where("opportunityId", isEqualTo: opportunity.opportunityId)
+            .where("opportunityId", isEqualTo: opportunityId)
             .getDocuments())
-        .documents
-        .first);
+        .documents?.first ?? null);
   }
 }

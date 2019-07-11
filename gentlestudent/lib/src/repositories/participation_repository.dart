@@ -20,5 +20,24 @@ final ParticipationApi _participationApi = ParticipationApi();
     }
   }
 
+  Future<Participation> getParticipationByOpportunityId(String opportunityId) async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    if (user != null) {
+      Participation participation;
+
+      if (_participations == null || _participations.isEmpty) {
+       participation = _participations.firstWhere((p) => p.opportunityId == opportunityId);
+      }
+
+      if (participation == null) {
+        participation = await _participationApi.getParticipationByOpportunityId(user, opportunityId);
+      }
+
+      return participation;
+    }
+
+    return null;
+  }
+
   void clearParticipations() => _participations = [];
 }
