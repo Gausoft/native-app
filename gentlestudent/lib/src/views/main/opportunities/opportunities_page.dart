@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gentlestudent/src/blocs/opportunity_navigation_bloc.dart';
 import 'package:gentlestudent/src/views/main/opportunities/opportunities_list_page/opportunities_list_page.dart';
 import 'package:gentlestudent/src/views/main/opportunities/opportunities_map_page/opportunities_map_page.dart';
+import 'package:gentlestudent/src/views/main/opportunities/opportunity_filter_page/opportunity_filter_page.dart';
 import 'package:provider/provider.dart';
 
 class OpportunitiesPage extends StatelessWidget {
@@ -25,6 +27,16 @@ class OpportunitiesPage extends StatelessWidget {
     "Klik hier om naar de map met leerkansen te gaan",
   ];
 
+  void _navigateToOpportunityFilterPage(BuildContext context) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) =>
+              OpportunityFilterPage(),
+        ),
+      );
+    }
+
   @override
   Widget build(BuildContext context) {
     final _opportunitiesNavigationBloc =
@@ -38,6 +50,14 @@ class OpportunitiesPage extends StatelessWidget {
         return Scaffold(
           appBar: opportunitiesAppBar(index, _opportunitiesNavigationBloc),
           body: _pages[index],
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: Colors.lightBlue,
+            child: Icon(
+              FontAwesomeIcons.filter,
+              color: Colors.white,
+            ),
+            onPressed: () => _navigateToOpportunityFilterPage(context),
+          ),
         );
       },
     );
@@ -46,7 +66,10 @@ class OpportunitiesPage extends StatelessWidget {
   Widget opportunitiesAppBar(int index, OpportunityNavigationBloc bloc) =>
       AppBar(
         centerTitle: true,
-        title: Text(_titles[index], style: TextStyle(color: Colors.white),),
+        title: Text(
+          _titles[index],
+          style: TextStyle(color: Colors.white),
+        ),
         iconTheme: IconThemeData(color: Colors.white),
         actions: <Widget>[
           IconButton(

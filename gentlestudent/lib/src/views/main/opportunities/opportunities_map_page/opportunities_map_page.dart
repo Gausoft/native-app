@@ -76,7 +76,7 @@ class OpportunitiesMapPage extends StatelessWidget {
 
     return Container(
       child: StreamBuilder(
-        stream: _opportunityBloc.opportunities,
+        stream: _opportunityBloc.filteredOpportunities,
         builder:
             (BuildContext context, AsyncSnapshot<List<Opportunity>> snapshot) {
           if (!snapshot.hasData) {
