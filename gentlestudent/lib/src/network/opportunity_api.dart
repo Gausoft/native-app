@@ -36,18 +36,4 @@ class OpportunityApi {
         .documents
         .first);
   }
-
-  Future<void> updateOpportunityAfterParticipationCreation(
-      Opportunity opportunity, int participations) async {
-    Map<String, int> data = <String, int>{
-      "participations": participations + 1,
-    };
-    await Firestore.instance
-        .collection("Opportunities")
-        .document(opportunity.opportunityId)
-        .updateData(data)
-        .whenComplete(() {
-      print("Opportunity updated");
-    }).catchError((e) => print(e));
-  }
 }

@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gentlestudent/src/models/opportunity.dart';
 import 'package:gentlestudent/src/models/participation.dart';
 import 'package:gentlestudent/src/network/participation_api.dart';
 
@@ -36,7 +37,19 @@ final ParticipationApi _participationApi = ParticipationApi();
       return participation;
     }
 
-    return null;
+    return Participation();
+  }
+
+  Future<Participation> enrollInOpportunity(Opportunity opportunity) async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    if (user != null) {
+      await _participationApi.enrollInOpportunity(user, opportunity);
+      Participation participation = await _participationApi.getParticipationByOpportunityId(user, opportunity.opportunityId);
+      if (participation.opportunityId != null) _participations.add(participation);
+      return participation;
+    }
+
+    return Participation();
   }
 
   void clearParticipations() => _participations = [];
