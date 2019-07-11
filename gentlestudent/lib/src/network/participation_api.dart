@@ -16,14 +16,14 @@ class ParticipationApi {
   }
 
   Future<void> updateParticipationAfterBadgeClaim(
-      Participation participation, String message) async {
+      String participationId, String message) async {
     Map<String, dynamic> data = <String, dynamic>{
       "status": 1,
       "message": message,
     };
     await Firestore.instance
         .collection("Participations")
-        .document(participation.participationId)
+        .document(participationId)
         .updateData(data)
         .whenComplete(() {
       print("Participation updated");

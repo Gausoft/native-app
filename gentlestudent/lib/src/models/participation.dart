@@ -7,7 +7,7 @@ class Participation {
   final String participantId;
   final String opportunityId;
   final String reason;
-  final Status status;
+  Status status;
 
   Participation({
     this.participationId,

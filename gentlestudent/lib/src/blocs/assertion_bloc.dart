@@ -1,4 +1,5 @@
 import 'package:gentlestudent/src/models/assertion.dart';
+import 'package:gentlestudent/src/models/badge.dart';
 import 'package:gentlestudent/src/repositories/assertion_repository.dart';
 import 'package:rxdart/subjects.dart';
 
@@ -13,6 +14,10 @@ class AssertionBloc {
   Future<void> fetchAssertions() async {
     List<Assertion> assertions = await _assertionRepository.assertions;
     _changeAssertions(assertions);
+  }
+
+  Future<bool> claimBadge(Badge badge) async {
+    return await _assertionRepository.claimBadge(badge.openBadgeId);
   }
 
   void onSignOut() {

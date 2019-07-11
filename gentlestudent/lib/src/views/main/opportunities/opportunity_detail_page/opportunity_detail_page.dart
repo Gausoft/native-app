@@ -1,15 +1,19 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:gentlestudent/src/blocs/assertion_bloc.dart';
 import 'package:gentlestudent/src/blocs/opportunity_bloc.dart';
 import 'package:gentlestudent/src/blocs/participant_bloc.dart';
 import 'package:gentlestudent/src/blocs/participation_bloc.dart';
+import 'package:gentlestudent/src/models/badge.dart';
 import 'package:gentlestudent/src/models/enums/difficulty.dart';
 import 'package:gentlestudent/src/models/enums/status.dart';
 import 'package:gentlestudent/src/models/opportunity.dart';
 import 'package:gentlestudent/src/models/participation.dart';
 import 'package:gentlestudent/src/views/authentication/widgets/app_bar.dart';
+import 'package:gentlestudent/src/views/main/opportunities/opportunity_detail_page/widgets/generic_registration_dialog.dart';
 import 'package:gentlestudent/src/views/main/opportunities/opportunity_detail_page/widgets/opportunity_header.dart';
 import 'package:gentlestudent/src/views/main/opportunities/opportunity_detail_page/widgets/opportunity_info_box.dart';
+import 'package:gentlestudent/src/views/main/opportunities/opportunity_detail_page/widgets/show_claim_badge_dialog.dart';
 import 'package:gentlestudent/src/views/main/opportunities/opportunity_detail_page/widgets/show_registration_dialog.dart';
 import 'package:gentlestudent/src/widgets/loading_spinner.dart';
 import 'package:provider/provider.dart';
@@ -19,9 +23,63 @@ class OpportunityDetailPage extends StatelessWidget {
 
   OpportunityDetailPage({this.opportunity});
 
-  Future<void> _enrollInOpportunity(ParticipationBloc bloc) async {
+  Future<void> _enrollInOpportunity(
+    ParticipationBloc bloc,
+    BuildContext context,
+  ) async {
     final isSucces = await bloc.enrollInOpportunity(opportunity);
-    print("isSucces: $isSucces");
+    isSucces
+        ? genericRegistrationDialog(
+            context,
+            "Registratie",
+            "Je bent succesvol geregistreerd voor deze leerkans!",
+          )
+        : genericRegistrationDialog(
+            context,
+            "Registratie",
+            "Er ging iets mis bij het registreren voor deze leerkans, probeer het opnieuw.",
+          );
+  }
+
+  Future<void> _claimBadge(
+    BuildContext context,
+    OpportunityBloc opportunityBloc,
+    AssertionBloc assertionBloc,
+    ParticipationBloc participationBloc,
+  ) async {
+    String message = await showClaimBadgeDialog(context);
+    if (message == "") {
+      genericRegistrationDialog(
+        context,
+        "Claim badge",
+        "Het veld was leeg. Je moet aantonen waarom je in aanmerking komt voor deze badge.",
+      );
+    } else {
+      Badge badge = await opportunityBloc.getBadgeOfOpportunity(opportunity);
+      if (badge != null) {
+        bool isAssertionCreationSucces = await assertionBloc.claimBadge(badge);
+        bool isUpdateSucces =
+            await participationBloc.updateParticipationAfterBadgeClaim(message);
+
+        isAssertionCreationSucces && isUpdateSucces
+            ? genericRegistrationDialog(
+                context,
+                "Claim badge",
+                "Je hebt de badge succesvol geclaimd! Deze is nu zichbaar in je backpack.",
+              )
+            : genericRegistrationDialog(
+                context,
+                "Claim badge",
+                "Er is iets fout gegaan tijdens het claimen van de badge. Controleer je internetverbinding en probeer het opnieuw.",
+              );
+      } else {
+        genericRegistrationDialog(
+          context,
+          "Claim badge",
+          "Er is iets fout gegaan tijdens het claimen van de badge. Controleer je internetverbinding en probeer het opnieuw.",
+        );
+      }
+    }
   }
 
   @override
@@ -29,6 +87,7 @@ class OpportunityDetailPage extends StatelessWidget {
     final _opportunityBloc = Provider.of<OpportunityBloc>(context);
     final _participantBloc = Provider.of<ParticipantBloc>(context);
     final _participationBloc = Provider.of<ParticipationBloc>(context);
+    final _assertionBloc = Provider.of<AssertionBloc>(context);
     _participationBloc.fetchParticipationByOpportunity(opportunity);
     final imageWidth = MediaQuery.of(context).size.width / 5;
 
@@ -50,7 +109,7 @@ class OpportunityDetailPage extends StatelessWidget {
           ),
           opportunityShortDescription(),
           opportunityLongDescription(),
-          enrollButton(_participationBloc),
+          enrollButton(_participationBloc, _assertionBloc, _opportunityBloc),
         ],
       ),
     );
@@ -87,8 +146,13 @@ class OpportunityDetailPage extends StatelessWidget {
         ),
       );
 
-  Widget enrollButton(ParticipationBloc bloc) => StreamBuilder(
-        stream: bloc.selectedParticipation,
+  Widget enrollButton(
+    ParticipationBloc participationBloc,
+    AssertionBloc assertionBloc,
+    OpportunityBloc opportunityBloc,
+  ) =>
+      StreamBuilder(
+        stream: participationBloc.selectedParticipation,
         builder: (BuildContext context, AsyncSnapshot<Participation> snapshot) {
           // The participation is still loading.
           if (!snapshot.hasData) {
@@ -102,7 +166,7 @@ class OpportunityDetailPage extends StatelessWidget {
               () => showRegistrationDialog(
                 context,
                 opportunity,
-                () => _enrollInOpportunity(bloc),
+                () => _enrollInOpportunity(participationBloc, context),
               ),
             );
           }
@@ -112,12 +176,16 @@ class OpportunityDetailPage extends StatelessWidget {
           if (snapshot.data.status != null &&
               snapshot.data.status == Status.PENDING &&
               opportunity.difficulty == Difficulty.BEGINNER) {
-            return opportunityButton("Claim de badge", () {});
+            return opportunityButton(
+              "Claim de badge",
+              () => _claimBadge(
+                  context, opportunityBloc, assertionBloc, participationBloc),
+            );
           } else {
             return Container(
               padding: EdgeInsets.fromLTRB(20, 16, 20, 8),
               child: Text(
-                "Je ben geregistreerd voor deze leerkans",
+                "Je bent geregistreerd voor deze leerkans",
                 textAlign: TextAlign.center,
               ),
             );

@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gentlestudent/src/models/enums/status.dart';
 import 'package:gentlestudent/src/models/opportunity.dart';
 import 'package:gentlestudent/src/models/participation.dart';
 import 'package:gentlestudent/src/network/participation_api.dart';
@@ -50,6 +51,13 @@ final ParticipationApi _participationApi = ParticipationApi();
     }
 
     return Participation();
+  }
+
+  Future<void> updateParticipationAfterBadgeClaim(Participation participation, String message) async {
+    await _participationApi.updateParticipationAfterBadgeClaim(participation.participationId, message);
+    participation.status = Status.APPROVED;
+    _participations.removeWhere((p) => p.participationId == participation.participationId);
+    _participations.add(participation);
   }
 
   void clearParticipations() => _participations = [];

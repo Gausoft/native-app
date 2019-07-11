@@ -20,5 +20,15 @@ class AssertionRepository {
     }
   }
 
+  Future<bool> claimBadge(String badgeId) async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    if (user != null) {
+      await _assertionApi.claimBadge(user, badgeId);
+      _assertions = await _assertionApi.getAllAssertionsFromUser(user.uid);
+      return true;
+    }
+    return false;
+  }
+
   void clearAssertions() => _assertions = [];
 }

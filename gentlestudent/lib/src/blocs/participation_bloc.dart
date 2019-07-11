@@ -43,6 +43,17 @@ class ParticipationBloc {
     }
   }
 
+  Future<bool> updateParticipationAfterBadgeClaim(String message) async {
+    Participation participation = _selectedParticipation.value;
+    if (participation == null) return false;
+    
+    await _participationRepository.updateParticipationAfterBadgeClaim(participation, message);
+
+    await fetchParticipations();
+
+    return true;
+  }
+
   void onSignOut() {
     _participationRepository.clearParticipations();
     _changeApprovedParticipations([]);
