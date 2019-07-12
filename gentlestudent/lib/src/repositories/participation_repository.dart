@@ -27,7 +27,7 @@ final ParticipationApi _participationApi = ParticipationApi();
     if (user != null) {
       Participation participation;
 
-      if (_participations == null || _participations.isEmpty) {
+      if (_participations != null && _participations.isNotEmpty) {
        participation = _participations.firstWhere((p) => p.opportunityId == opportunityId);
       }
 

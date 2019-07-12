@@ -51,6 +51,9 @@ class ParticipationBloc {
 
     await fetchParticipations();
 
+    participation.status = Status.APPROVED;
+    _changeSelectedParticipation(participation);
+
     return true;
   }
 
