@@ -28,7 +28,8 @@ final ParticipationApi _participationApi = ParticipationApi();
       Participation participation;
 
       if (_participations != null && _participations.isNotEmpty) {
-       participation = _participations.firstWhere((p) => p.opportunityId == opportunityId);
+       List<Participation> participations = _participations.where((p) => p.opportunityId == opportunityId).toList();
+       participation = participations.length >= 1 ? participations.first : null;
       }
 
       if (participation == null) {

@@ -54,7 +54,7 @@ class OpportunityDetailPage extends StatelessWidget {
         "Claim badge",
         "Het veld was leeg. Je moet aantonen waarom je in aanmerking komt voor deze badge.",
       );
-    } else {
+    } else if (message != null) {
       Badge badge = await opportunityBloc.getBadgeOfOpportunity(opportunity);
       if (badge != null) {
         bool isAssertionCreationSucces = await assertionBloc.claimBadge(badge);
