@@ -1,4 +1,5 @@
 import 'package:gentlestudent/src/models/enums/status.dart';
+import 'package:gentlestudent/src/models/issuer.dart';
 import 'package:gentlestudent/src/models/opportunity.dart';
 import 'package:gentlestudent/src/models/participation.dart';
 import 'package:gentlestudent/src/repositories/participation_repository.dart';
@@ -30,8 +31,8 @@ class ParticipationBloc {
     _changeSelectedParticipation(participation);
   }
 
-  Future<bool> enrollInOpportunity(Opportunity opportunity) async {
-    Participation participation = await _participationRepository.enrollInOpportunity(opportunity);
+  Future<bool> enrollInOpportunity(Opportunity opportunity, Issuer issuer) async {
+    Participation participation = await _participationRepository.enrollInOpportunity(opportunity, issuer);
     if (participation.opportunityId == null) {
       return false;
     } else {

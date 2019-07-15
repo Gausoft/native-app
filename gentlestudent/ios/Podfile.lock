@@ -9,6 +9,10 @@ PODS:
     - Firebase/Core
     - Firebase/Firestore (~> 6.0)
     - Flutter
+  - cloud_functions (0.0.1):
+    - Firebase/Core
+    - Firebase/Functions (~> 6.0)
+    - Flutter
   - Firebase/Auth (6.3.0):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 6.1.2)
@@ -20,6 +24,9 @@ PODS:
   - Firebase/Firestore (6.3.0):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 1.4.0)
+  - Firebase/Functions (6.3.0):
+    - Firebase/CoreOnly
+    - FirebaseFunctions (~> 2.5.1)
   - Firebase/Storage (6.3.0):
     - Firebase/CoreOnly
     - FirebaseStorage (~> 3.2.1)
@@ -67,6 +74,10 @@ PODS:
     - leveldb-library (~> 1.20)
     - nanopb (~> 0.3.901)
     - Protobuf (~> 3.1)
+  - FirebaseFunctions (2.5.1):
+    - FirebaseAuthInterop (~> 1.0)
+    - FirebaseCore (~> 6.0)
+    - GTMSessionFetcher/Core (~> 1.1)
   - FirebaseInstanceID (4.2.0):
     - FirebaseCore (~> 6.0)
     - GoogleUtilities/Environment (~> 6.0)
@@ -143,6 +154,7 @@ PODS:
 
 DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
+  - cloud_functions (from `.symlinks/plugins/cloud_functions/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
@@ -163,6 +175,7 @@ SPEC REPOS:
     - FirebaseAuthInterop
     - FirebaseCore
     - FirebaseFirestore
+    - FirebaseFunctions
     - FirebaseInstanceID
     - FirebaseStorage
     - FMDB
@@ -178,6 +191,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
+  cloud_functions:
+    :path: ".symlinks/plugins/cloud_functions/ios"
   firebase_auth:
     :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
@@ -202,6 +217,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   BoringSSL-GRPC: db8764df3204ccea016e1c8dd15d9a9ad63ff318
   cloud_firestore: bea98f51ff83b368d2984d3a6b9a6ac8dd89bf63
+  cloud_functions: 9ecdccbb914fb5ceaf8b73d867308a6afa14e084
   Firebase: 8432d732974498afd5987e9001a05f90f1a3d625
   firebase_auth: ba238762663f6b3503cc5468c50d652df1306185
   firebase_core: 44f31f51532812598f0f9f4af0caa705b9edfc19
@@ -211,6 +227,7 @@ SPEC CHECKSUMS:
   FirebaseAuthInterop: 0ffa57668be100582bb7643d4fcb7615496c41fc
   FirebaseCore: 68f8a7f50cdae542715d4e86afa37c4067217dcb
   FirebaseFirestore: 75768d91aad491eccdc02202b8161cff9872300e
+  FirebaseFunctions: 5af7c35d1c5e41608fecbb667eb6c4e672e318d0
   FirebaseInstanceID: f20243a1d828e0e9a3798b995174dedc16f1b32a
   FirebaseStorage: 926d41552072b9fee67aa645760f05f87b7ce604
   Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a

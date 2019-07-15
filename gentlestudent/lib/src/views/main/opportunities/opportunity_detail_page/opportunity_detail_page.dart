@@ -7,6 +7,7 @@ import 'package:gentlestudent/src/blocs/participation_bloc.dart';
 import 'package:gentlestudent/src/models/badge.dart';
 import 'package:gentlestudent/src/models/enums/difficulty.dart';
 import 'package:gentlestudent/src/models/enums/status.dart';
+import 'package:gentlestudent/src/models/issuer.dart';
 import 'package:gentlestudent/src/models/opportunity.dart';
 import 'package:gentlestudent/src/models/participation.dart';
 import 'package:gentlestudent/src/views/authentication/widgets/app_bar.dart';
@@ -24,10 +25,12 @@ class OpportunityDetailPage extends StatelessWidget {
   OpportunityDetailPage({this.opportunity});
 
   Future<void> _enrollInOpportunity(
-    ParticipationBloc bloc,
+    ParticipationBloc participationBloc,
     BuildContext context,
+    OpportunityBloc opportunityBloc,
   ) async {
-    final isSucces = await bloc.enrollInOpportunity(opportunity);
+    Issuer issuer = await opportunityBloc.getIssuerOfOpportunity(opportunity);
+    final isSucces = await participationBloc.enrollInOpportunity(opportunity, issuer);
     isSucces
         ? genericRegistrationDialog(
             context,
@@ -166,7 +169,7 @@ class OpportunityDetailPage extends StatelessWidget {
               () => showRegistrationDialog(
                 context,
                 opportunity,
-                () => _enrollInOpportunity(participationBloc, context),
+                () => _enrollInOpportunity(participationBloc, context, opportunityBloc),
               ),
             );
           }

@@ -36,6 +36,9 @@ dependencies:
   # Used to access the storage of the Firebase.
   firebase_storage: ^3.0.2
 
+  # Used for cloud functions (sending emails in our case).
+  cloud_functions: ^0.4.0+2
+
   # Used to cache images that come from the internet.
   cached_network_image: ^0.8.0
 

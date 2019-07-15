@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gentlestudent/src/models/issuer.dart';
 import 'package:gentlestudent/src/models/opportunity.dart';
 import 'package:gentlestudent/src/models/participation.dart';
 
@@ -49,6 +51,7 @@ class ParticipationApi {
   Future<void> enrollInOpportunity(
     FirebaseUser user,
     Opportunity opportunity,
+    Issuer issuer,
   ) async {
     Map<String, dynamic> data = <String, dynamic>{
       "participantId": user.uid,
@@ -63,6 +66,17 @@ class ParticipationApi {
       await _updateOpportunityAfterParticipationCreation(
           opportunity, opportunity.participations);
       print("Participation added");
+    }).whenComplete(() async {
+      final HttpsCallable callable = CloudFunctions.instance.getHttpsCallable(
+        functionName: 'notifyIssuer',
+      );
+      await callable.call(<String, dynamic>{
+        "opportunityTitle": opportunity.title,
+        "participantName": user.displayName,
+        "participantEmail": user.email,
+        "issuerEmail": issuer.email,
+      });
+      print("Email sent");
     }).catchError((e) => print(e));
   }
 
