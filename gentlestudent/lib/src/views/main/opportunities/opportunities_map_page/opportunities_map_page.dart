@@ -15,8 +15,11 @@ import 'package:latlong/latlong.dart';
 import 'package:provider/provider.dart';
 
 class OpportunitiesMapPage extends StatelessWidget {
-  Future<List<Marker>> generateMarkers(List<Opportunity> opportunities,
-      OpportunityBloc bloc, BuildContext context) async {
+  Future<List<Marker>> generateMarkers(
+    List<Opportunity> opportunities,
+    OpportunityBloc bloc,
+    BuildContext context,
+  ) async {
     List<Marker> markers = [];
     for (int i = 0; i < opportunities.length; i++) {
       Address address = await bloc.getAddressOfOpportunity(opportunities[i]);
@@ -41,8 +44,11 @@ class OpportunitiesMapPage extends StatelessWidget {
     return markers;
   }
 
-  Future<void> _onMarkerTap(BuildContext context, Opportunity opportunity,
-      OpportunityBloc bloc) async {
+  Future<void> _onMarkerTap(
+    BuildContext context,
+    Opportunity opportunity,
+    OpportunityBloc bloc,
+  ) async {
     Badge badge = await bloc.getBadgeOfOpportunity(opportunity);
     Issuer issuer = await bloc.getIssuerOfOpportunity(opportunity);
 
@@ -67,12 +73,25 @@ class OpportunitiesMapPage extends StatelessWidget {
     );
   }
 
+  Future<void> _searchNearbyOpportunities(
+    UserLocation userLocation,
+    OpportunityBloc bloc,
+  ) async {
+    // FOR TESTING
+    // UserLocation fakeLocation = UserLocation(latitude: 51.03563520797982, longitude: 3.721189648657173);
+    // List<Opportunity> opportunities =await bloc.searchNearbyOpportunities(fakeLocation);
+    // print(opportunities);
+    if (userLocation != null) {
+      List<Opportunity> opportunities =await bloc.searchNearbyOpportunities(userLocation);
+      print(opportunities);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final _opportunityBloc = Provider.of<OpportunityBloc>(context);
     final _userLocation = Provider.of<UserLocation>(context);
-    print(
-        'Location: Lat: ${_userLocation?.latitude}, Long: ${_userLocation?.longitude}');
+    print('Location: Lat: ${_userLocation?.latitude}, Long: ${_userLocation?.longitude}');
 
     return Container(
       child: StreamBuilder(
@@ -82,6 +101,8 @@ class OpportunitiesMapPage extends StatelessWidget {
           if (!snapshot.hasData) {
             return loadingSpinner();
           }
+
+          _searchNearbyOpportunities(_userLocation, _opportunityBloc);
 
           return FutureBuilder(
             future: generateMarkers(snapshot.data, _opportunityBloc, context),

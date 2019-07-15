@@ -4,13 +4,16 @@ import 'package:gentlestudent/src/models/enums/category.dart';
 import 'package:gentlestudent/src/models/enums/difficulty.dart';
 import 'package:gentlestudent/src/models/issuer.dart';
 import 'package:gentlestudent/src/models/opportunity.dart';
+import 'package:gentlestudent/src/models/user_location.dart';
 import 'package:gentlestudent/src/repositories/address_repository.dart';
 import 'package:gentlestudent/src/repositories/badge_repository.dart';
 import 'package:gentlestudent/src/repositories/issuer_repository.dart';
 import 'package:gentlestudent/src/repositories/opportunities_repository.dart';
+import 'package:latlong/latlong.dart';
 import 'package:rxdart/rxdart.dart';
 
 class OpportunityBloc {
+  final Distance _distance = Distance();
   final _opportunitiesRepository = OpportunitiesRepository();
   final _addressRepository = AddressRepository();
   final _badgeRepository = BadgeRepository();
@@ -78,12 +81,12 @@ class OpportunityBloc {
 
     if (opportunityName != null && opportunityName != "")
       filteredOpportunities = filteredOpportunities
-          .where((o) => o.title.toLowerCase().contains(opportunityName.toLowerCase()))
+          .where((o) =>
+              o.title.toLowerCase().contains(opportunityName.toLowerCase()))
           .toList();
     if (category != null)
-      filteredOpportunities = filteredOpportunities
-          .where((o) => o.category == category)
-          .toList();
+      filteredOpportunities =
+          filteredOpportunities.where((o) => o.category == category).toList();
     if (difficulty != null)
       filteredOpportunities = filteredOpportunities
           .where((o) => o.difficulty == difficulty)
@@ -106,6 +109,27 @@ class OpportunityBloc {
     _difficultyFilter.sink.add(difficulty);
     filterOpportunities();
   }
+
+  Future<List<Opportunity>> searchNearbyOpportunities(UserLocation userLocation) async {
+    List<Opportunity> opportunities = _opportunities.value;
+    List<Opportunity> nearbyOpportunities = [];
+
+    if (opportunities != null && opportunities.isNotEmpty) {
+      for (final opportunity in opportunities) {
+        Address address = await getAddressOfOpportunity(opportunity);
+        if (_calculateDistanceInMeters(userLocation, address) <= 10.0) {
+          nearbyOpportunities.add(opportunity);
+        }
+      }
+    }
+
+    return nearbyOpportunities;
+  }
+
+  double _calculateDistanceInMeters(UserLocation userLocation, Address address) => _distance(
+    LatLng(userLocation.latitude, userLocation.longitude),
+    LatLng(address.latitude, address.longitude),
+  );
 
   void dispose() {
     _opportunities.close();

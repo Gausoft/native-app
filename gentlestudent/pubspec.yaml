@@ -54,6 +54,9 @@ dependencies:
   # Used to get the location of the user.
   location: ^2.3.5
 
+  # Used to calculate distance between coordinates.
+  latlong: ^0.6.1
+
   # Used for taking pictures and using the gallery of a user.
   image_picker: ^0.6.0+11
 
@@ -62,6 +65,9 @@ dependencies:
 
   # Used to get additional icons.
   font_awesome_flutter: ^8.0.1
+
+  # Used for showing notifications.
+  flutter_local_notifications: ^0.7.1+3
 
 dev_dependencies:
   flutter_test:
