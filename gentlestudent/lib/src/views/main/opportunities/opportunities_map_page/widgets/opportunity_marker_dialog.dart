@@ -53,6 +53,8 @@ Future<Null> displayOpportunity(BuildContext context, Opportunity opportunity,
                   opportunity.shortDescription,
                   textAlign: TextAlign.start,
                   style: TextStyle(fontSize: 14),
+                  maxLines: 5,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               Padding(

@@ -183,7 +183,7 @@ class OpportunityDetailPage extends StatelessWidget {
             );
           } else {
             return Container(
-              padding: EdgeInsets.fromLTRB(20, 16, 20, 8),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
               child: Text(
                 "Je bent geregistreerd voor deze leerkans",
                 textAlign: TextAlign.center,
@@ -194,7 +194,7 @@ class OpportunityDetailPage extends StatelessWidget {
       );
 
   Widget opportunityButton(String text, Function onPressed) => Padding(
-        padding: EdgeInsets.fromLTRB(20, 16, 20, 8),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[

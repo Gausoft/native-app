@@ -85,9 +85,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
     return Scaffold(
       appBar: registrationAppBar(),
       body: Container(
-        padding: EdgeInsets.all(24),
         child: Center(
           child: SingleChildScrollView(
+            padding: EdgeInsets.all(24),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[

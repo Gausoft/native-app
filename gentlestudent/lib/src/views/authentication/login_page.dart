@@ -133,8 +133,8 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Expanded(
               flex: 3,
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 10),
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(vertical: 12),
                 child: Center(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
