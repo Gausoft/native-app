@@ -3,6 +3,8 @@ import 'package:gentlestudent/src/blocs/assertion_bloc.dart';
 import 'package:gentlestudent/src/blocs/main_navigation_bloc.dart';
 import 'package:gentlestudent/src/blocs/participant_bloc.dart';
 import 'package:gentlestudent/src/blocs/participation_bloc.dart';
+import 'package:gentlestudent/src/blocs/quest_bloc.dart';
+import 'package:gentlestudent/src/blocs/token_bloc.dart';
 import 'package:gentlestudent/src/views/main/information/information_page.dart';
 import 'package:gentlestudent/src/views/main/opportunities/opportunities_page.dart';
 import 'package:gentlestudent/src/views/main/user/user_page.dart';
@@ -21,9 +23,13 @@ class MainPage extends StatelessWidget {
     final _participantBloc = Provider.of<ParticipantBloc>(context);
     final _assertionBloc = Provider.of<AssertionBloc>(context);
     final _participationBloc = Provider.of<ParticipationBloc>(context);
+    final _questBloc = Provider.of<QuestBloc>(context);
+    final _tokenBloc = Provider.of<TokenBloc>(context);
     _participantBloc.fetchParticipant();
     _assertionBloc.fetchAssertions();
     _participationBloc.fetchParticipations();
+    _questBloc.fetchQuests();
+    _tokenBloc.fetchTokens();
 
     return StreamBuilder(
       stream: _mainNavigationBloc.currentIndex,
