@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gentlestudent/src/models/quest.dart';
 import 'package:gentlestudent/src/models/quest_taker.dart';
 import 'package:gentlestudent/src/network/quest_api.dart';
@@ -30,6 +31,22 @@ class QuestRepository {
   Future<List<QuestTaker>> fetchQuestTakersByQuestId(String questId) async {
     List<QuestTaker> questTakers = await _questApi.fetchQuestTakersByQuestId(questId);
     return questTakers;
+  }
+
+  Future<List<QuestTaker>> fetchQuestTakersByUserId() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    if (user == null) return [];
+
+    List<QuestTaker> questTakers = await _questApi.fetchQuestTakersByUserId(user.uid);
+    return questTakers;
+  }
+
+  Future<QuestTaker> fetchQuestTakerByQuestIdAndParticipantId(String questId) async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    if (user == null) return null;
+
+    QuestTaker questTaker = await _questApi.fetchQuestTakerByQuestIdAndParticipantId(user.uid, questId);
+    return questTaker;
   }
 
   Future<void> _fetchQuests() async {

@@ -5,12 +5,14 @@ class QuestTaker {
   final String questId;
   final String participantId;
   bool isDoingQuest;
+  final Timestamp acceptedOn;
 
   QuestTaker({
     this.questTakerId,
     this.questId,
     this.participantId,
     this.isDoingQuest,
+    this.acceptedOn,
   });
 
   factory QuestTaker.fromDocumentSnapshot(DocumentSnapshot snapshot) {
@@ -21,6 +23,7 @@ class QuestTaker {
       questId: data['questId'],
       participantId: data['participantId'],
       isDoingQuest: data['isDoingQuest'],
+      acceptedOn: data['acceptedOn'],
     );
   }
 }

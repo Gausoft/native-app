@@ -32,41 +32,37 @@ class OpportunityListItem extends StatelessWidget {
       );
     }
 
-    return Column(
-      children: <Widget>[
-        InkWell(
+    return Card(
+      margin: EdgeInsets.only(bottom: 8),
+      elevation: 3,
+      child: Container(
+        child: InkWell(
           onTap: _navigateToOpportunityDetailPage,
-          child: Card(
-            margin: EdgeInsets.only(bottom: 8),
-            elevation: 3,
-            child: Container(
-              child: Row(
-                children: <Widget>[
-                  opportunityLogo(opportunity, _opportunityBloc, imageWidth),
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(10, 10, 16, 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          opportunityTitle(opportunity, context),
-                          SizedBox(height: 4),
-                          opportunitySubtitle(
-                            opportunity,
-                            _opportunityBloc,
-                            isRequested,
-                            participation,
-                          ),
-                        ],
+          child: Row(
+            children: <Widget>[
+              opportunityLogo(opportunity, _opportunityBloc, imageWidth),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(10, 10, 16, 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      opportunityTitle(opportunity, context),
+                      SizedBox(height: 4),
+                      opportunitySubtitle(
+                        opportunity,
+                        _opportunityBloc,
+                        isRequested,
+                        participation,
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
         ),
-      ],
+      ),
     );
   }
 }

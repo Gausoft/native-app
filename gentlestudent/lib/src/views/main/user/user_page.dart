@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gentlestudent/src/views/authentication/widgets/app_bar.dart';
 import 'package:gentlestudent/src/views/main/user/backpack_page/backpack_page.dart';
 import 'package:gentlestudent/src/views/main/user/favorites_page/favorites_page.dart';
 import 'package:gentlestudent/src/views/main/user/participations_page/participations_page.dart';
 import 'package:gentlestudent/src/views/main/user/profile_page/profile_page.dart';
+import 'package:gentlestudent/src/views/main/user/quest_page/quest_page.dart';
 import 'package:gentlestudent/src/views/main/user/settings_page/settings_page.dart';
 
 class UserPage extends StatelessWidget {
@@ -43,6 +45,15 @@ class UserPage extends StatelessWidget {
     );
   }
 
+  void _navigateToQuestPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => QuestPage(),
+      ),
+    );
+  }
+
   void _navigateToParticipationsPage(BuildContext context) {
     Navigator.push(
       context,
@@ -65,6 +76,7 @@ class UserPage extends StatelessWidget {
           gridIconButton(() => _navigateToParticipationsPage(context), Icons.school, "Leerkansen"),
           gridIconButton(() => _navigateToFavoritesPage(context), Icons.favorite, "Favorieten"),
           gridIconButton(() => _navigateToSettingsPage(context), Icons.settings, "Instellingen"),
+          gridIconButton(() => _navigateToQuestPage(context), FontAwesomeIcons.questionCircle, "Quests"),
         ],
       ),
     );
