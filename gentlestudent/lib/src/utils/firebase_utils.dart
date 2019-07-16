@@ -1,6 +1,7 @@
 import 'package:gentlestudent/src/models/enums/authority.dart';
 import 'package:gentlestudent/src/models/enums/category.dart';
 import 'package:gentlestudent/src/models/enums/difficulty.dart';
+import 'package:gentlestudent/src/models/enums/quest_status.dart';
 import 'package:gentlestudent/src/models/enums/status.dart';
 
 class FirebaseUtils {
@@ -12,8 +13,22 @@ class FirebaseUtils {
         return Difficulty.INTERMEDIATE;
       case 2:
         return Difficulty.EXPERT;
+      default:
+        return Difficulty.INTERMEDIATE;
     }
-    return Difficulty.BEGINNER;
+  }
+  
+  static QuestStatus dataToQuestStatus(int questStatus) {
+    switch (questStatus) {
+      case 0:
+        return QuestStatus.AVAILABLE;
+      case 1:
+        return QuestStatus.INPROGRESS;
+      case 2:
+        return QuestStatus.FINISHED;
+      default:
+        return QuestStatus.INPROGRESS;
+    }
   }
 
   static Authority dataToAuthority(int authority) {

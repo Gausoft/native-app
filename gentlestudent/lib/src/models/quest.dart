@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gentlestudent/src/models/enums/quest_status.dart';
+import 'package:gentlestudent/src/utils/firebase_utils.dart';
 
 class Quest {
   final String questId;
@@ -33,13 +34,13 @@ class Quest {
       questId: snapshot.documentID,
       title: data['title'],
       description: data['description'],
-      questStatus: data['questStatus'],
+      questStatus: FirebaseUtils.dataToQuestStatus(data['questStatus']),
       questGiverId: data['questGiverId'],
       created: data['createdTimeStamp'],
       phoneNumber: data['phoneNumber'],
       emailAddress: data['emailAddress'],
-      latitude: data['latitude'],
-      longitude: data['longitude'],
+      latitude: data['latitude'].runtimeType == double ? data['latitude'] : 0,
+      longitude: data['longitude'].runtimeType == double ? data['longitude'] : 0,
     );
   }
 }
