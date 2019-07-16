@@ -15,4 +15,18 @@ class OpportunitiesRepository {
   Future _fetchOpportunities() async {
     _opportunities = await _opportunityApi.getAllOpportunities();
   }
+
+  Future<Opportunity> fetchOpportunityById(String id) async {
+    Opportunity opportunity;
+
+    if (_opportunities == null || _opportunities.isEmpty) {
+      opportunity = _opportunities.firstWhere((o) => o.opportunityId == id);
+    }
+
+    if (opportunity == null) {
+      opportunity = await _opportunityApi.getOpportunityById(id);
+    }
+
+    return opportunity;
+  }
 }

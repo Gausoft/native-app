@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gentlestudent/src/blocs/opportunity_bloc.dart';
@@ -14,7 +15,15 @@ import 'package:gentlestudent/src/widgets/loading_spinner.dart';
 import 'package:latlong/latlong.dart';
 import 'package:provider/provider.dart';
 
-class OpportunitiesMapPage extends StatelessWidget {
+class OpportunitiesMapPage extends StatefulWidget {
+  _OpportunitiesMapPageState createState() => _OpportunitiesMapPageState();
+}
+
+class _OpportunitiesMapPageState extends State<OpportunitiesMapPage> {
+  static List<String> notifiedOpportunities = [];
+  FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
+  OpportunityBloc opportunityBloc;
+
   Future<List<Marker>> generateMarkers(
     List<Opportunity> opportunities,
     OpportunityBloc bloc,
@@ -57,13 +66,14 @@ class OpportunitiesMapPage extends StatelessWidget {
       opportunity,
       issuer,
       badge,
-      () => _navigateToOpportunityDetailPage(context, opportunity),
+      () => {
+        Navigator.of(context).pop(),
+        _navigateToOpportunityDetailPage(opportunity)
+      },
     );
   }
 
-  void _navigateToOpportunityDetailPage(
-      BuildContext context, Opportunity opportunity) {
-    Navigator.of(context).pop();
+  void _navigateToOpportunityDetailPage(Opportunity opportunity) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -78,13 +88,56 @@ class OpportunitiesMapPage extends StatelessWidget {
     OpportunityBloc bloc,
   ) async {
     // FOR TESTING
-    // UserLocation fakeLocation = UserLocation(latitude: 51.03563520797982, longitude: 3.721189648657173);
-    // List<Opportunity> opportunities =await bloc.searchNearbyOpportunities(fakeLocation);
-    // print(opportunities);
+    UserLocation fakeLocation = UserLocation(latitude: 51.03563520797982, longitude: 3.721189648657173);
+    List<Opportunity> opportunities = await bloc.searchNearbyOpportunities(fakeLocation);
+
     if (userLocation != null) {
-      List<Opportunity> opportunities =await bloc.searchNearbyOpportunities(userLocation);
-      print(opportunities);
+      // FOR REAL
+      // List<Opportunity> opportunities = await bloc.searchNearbyOpportunities(userLocation);
+
+      for (final opportunity in opportunities) {
+        if (!notifiedOpportunities.contains(opportunity.opportunityId)) {
+          notifiedOpportunities.add(opportunity.opportunityId);
+          await showNotification(opportunity);
+        }
+      }
     }
+  }
+
+  Future<void> showNotification(Opportunity opportunity) async {
+    final androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      '0', 'main_channel', 'the main channel',
+      importance: Importance.Max, priority: Priority.High, ticker: 'ticker',
+    );
+
+    final iOSPlatformChannelSpecifics = IOSNotificationDetails();
+
+    final platformChannelSpecifics = NotificationDetails(androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    await _flutterLocalNotificationsPlugin.show(
+      0,
+      'Er is een leerkans in de buurt',
+      opportunity.title,
+      platformChannelSpecifics,
+      payload: opportunity.opportunityId,
+    );
+  }
+
+  Future<void> onSelectNotification(String payload) async {
+    if (payload != null) {
+      Opportunity opportunity = await opportunityBloc.getOpportunityById(payload);
+      _navigateToOpportunityDetailPage(opportunity);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    final initializationSettingsAndroid = AndroidInitializationSettings('gentlestudent_logo');
+    final initializationSettingsIOS = IOSInitializationSettings();
+    final initializationSettings = InitializationSettings(initializationSettingsAndroid, initializationSettingsIOS);
+    _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    _flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
   }
 
   @override
@@ -102,6 +155,7 @@ class OpportunitiesMapPage extends StatelessWidget {
             return loadingSpinner();
           }
 
+          opportunityBloc = _opportunityBloc;
           _searchNearbyOpportunities(_userLocation, _opportunityBloc);
 
           return FutureBuilder(
