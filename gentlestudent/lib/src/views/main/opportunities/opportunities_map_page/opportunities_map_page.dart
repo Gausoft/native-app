@@ -43,7 +43,8 @@ class _OpportunitiesMapPageState extends State<OpportunitiesMapPage> {
           height: 100,
           point: LatLng(address.latitude, address.longitude),
           builder: (context) => GestureDetector(
-            onTap: () => _onOpportunityMarkerTap(context, opportunities[i], bloc),
+            onTap: () =>
+                _onOpportunityMarkerTap(context, opportunities[i], bloc),
             child: Container(
               child: CachedNetworkImage(
                 imageUrl: opportunities[i].pinImageUrl,
@@ -66,20 +67,21 @@ class _OpportunitiesMapPageState extends State<OpportunitiesMapPage> {
       for (int i = 0; i < quests.length; i++) {
         markers.add(
           Marker(
-          width: 35,
-          height: 35,
-          point: LatLng(quests[i].latitude, quests[i].longitude),
-          builder: (context) => GestureDetector(
-            onTap: () => _onQuestMarkerTap(context, quests[i]),
-            child: Container(
-              child: CachedNetworkImage(
-                imageUrl: questCircleImageUrl,
-                placeholder: (context, message) => CircularProgressIndicator(),
-                errorWidget: (context, message, object) => Icon(Icons.error),
+            width: 35,
+            height: 35,
+            point: LatLng(quests[i].latitude, quests[i].longitude),
+            builder: (context) => GestureDetector(
+              onTap: () => _onQuestMarkerTap(context, quests[i]),
+              child: Container(
+                child: CachedNetworkImage(
+                  imageUrl: questCircleImageUrl,
+                  placeholder: (context, message) =>
+                      CircularProgressIndicator(),
+                  errorWidget: (context, message, object) => Icon(Icons.error),
+                ),
               ),
             ),
           ),
-        ),
         );
       }
     }
@@ -142,14 +144,8 @@ class _OpportunitiesMapPageState extends State<OpportunitiesMapPage> {
     BuildContext context,
     Quest quest,
   ) async {
-    displayQuestMarkerDialog(
-      context,
-      quest,
-      () => {
-        Navigator.of(context).pop(),
-        _navigateToQuestDetailPage(quest)
-      }
-    );
+    displayQuestMarkerDialog(context, quest,
+        () => {Navigator.of(context).pop(), _navigateToQuestDetailPage(quest)});
   }
 
   void _navigateToOpportunityDetailPage(Opportunity opportunity) {
@@ -166,8 +162,7 @@ class _OpportunitiesMapPageState extends State<OpportunitiesMapPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (BuildContext context) =>
-            QuestDetailPage(quest),
+        builder: (BuildContext context) => QuestDetailPage(quest),
       ),
     );
   }
@@ -176,11 +171,14 @@ class _OpportunitiesMapPageState extends State<OpportunitiesMapPage> {
   void initState() {
     super.initState();
 
-    final initializationSettingsAndroid = AndroidInitializationSettings('gentlestudent_logo');
+    final initializationSettingsAndroid =
+        AndroidInitializationSettings('gentlestudent_logo');
     final initializationSettingsIOS = IOSInitializationSettings();
-    final initializationSettings = InitializationSettings(initializationSettingsAndroid, initializationSettingsIOS);
+    final initializationSettings = InitializationSettings(
+        initializationSettingsAndroid, initializationSettingsIOS);
     _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    _flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
+    _flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: onSelectNotification);
   }
 
   @override
@@ -203,55 +201,64 @@ class _OpportunitiesMapPageState extends State<OpportunitiesMapPage> {
           _searchNearbyOpportunities(_userLocation, _opportunityBloc);
 
           return StreamBuilder(
-            stream: _questBloc.quests,
+            stream: _opportunityBloc.showQuestsFilter,
             builder: (BuildContext context,
-                AsyncSnapshot<List<Quest>> questsSnapshot) {
-              return FutureBuilder(
-                future: generateOpportunityMarkers(
-                    opportunitiesSnapshot.data, _opportunityBloc, context),
+                AsyncSnapshot<bool> showQuestsFilterSnapshot) {
+              return StreamBuilder(
+                stream: _questBloc.quests,
                 builder: (BuildContext context,
-                    AsyncSnapshot<List<Marker>> opportunityMarkersSnapshot) {
-                  if (!opportunityMarkersSnapshot.hasData) {
-                    return loadingSpinner();
-                  }
-
+                    AsyncSnapshot<List<Quest>> questsSnapshot) {
                   return FutureBuilder(
-                    future: generateQuestMarkers(questsSnapshot.data),
+                    future: generateOpportunityMarkers(
+                        opportunitiesSnapshot.data, _opportunityBloc, context),
                     builder: (BuildContext context,
-                        AsyncSnapshot<List<Marker>> questMarkersSnapshot) {
-                      return FlutterMap(
-                        options: MapOptions(
-                          center: LatLng(51.052233, 3.723653),
-                          zoom: 14,
-                          maxZoom: 16,
-                          minZoom: 12,
-                        ),
-                        layers: [
-                          TileLayerOptions(
-                            urlTemplate: "https://api.tiles.mapbox.com/v4/"
-                                "{id}/{z}/{x}/{y}@2x.png?access_token={accessToken}",
-                            additionalOptions: {
-                              'accessToken':
-                                  'pk.eyJ1IjoiZ2VudGxlc3R1ZGVudCIsImEiOiJjampxdGI5cGExMjh2M3FudTVkYnl3aDlzIn0.Z3OSj_o97M8_7L8P5s3xIA',
-                              'id': Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? 'mapbox.dark'
-                                  : 'mapbox.streets',
-                            },
-                          ),
-                          MarkerLayerOptions(
-                              markers: opportunityMarkersSnapshot.data),
-                          _userLocation != null &&
-                                  _userLocation.latitude != null &&
-                                  _userLocation.longitude != null
-                              ? userLocationMarker(_userLocation)
-                              : MarkerLayerOptions(),
-                          questMarkersSnapshot.hasData &&
-                                  questMarkersSnapshot.data.isNotEmpty
-                              ? MarkerLayerOptions(
-                                  markers: questMarkersSnapshot.data)
-                              : MarkerLayerOptions(),
-                        ],
+                        AsyncSnapshot<List<Marker>>
+                            opportunityMarkersSnapshot) {
+                      if (!opportunityMarkersSnapshot.hasData) {
+                        return loadingSpinner();
+                      }
+
+                      return FutureBuilder(
+                        future: generateQuestMarkers(questsSnapshot.data),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<Marker>> questMarkersSnapshot) {
+                          return FlutterMap(
+                            options: MapOptions(
+                              center: LatLng(51.052233, 3.723653),
+                              zoom: 14,
+                              maxZoom: 16,
+                              minZoom: 12,
+                            ),
+                            layers: [
+                              TileLayerOptions(
+                                urlTemplate: "https://api.tiles.mapbox.com/v4/"
+                                    "{id}/{z}/{x}/{y}@2x.png?access_token={accessToken}",
+                                additionalOptions: {
+                                  'accessToken':
+                                      'pk.eyJ1IjoiZ2VudGxlc3R1ZGVudCIsImEiOiJjampxdGI5cGExMjh2M3FudTVkYnl3aDlzIn0.Z3OSj_o97M8_7L8P5s3xIA',
+                                  'id': Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? 'mapbox.dark'
+                                      : 'mapbox.streets',
+                                },
+                              ),
+                              MarkerLayerOptions(
+                                  markers: opportunityMarkersSnapshot.data),
+                              _userLocation != null &&
+                                      _userLocation.latitude != null &&
+                                      _userLocation.longitude != null
+                                  ? userLocationMarker(_userLocation)
+                                  : MarkerLayerOptions(),
+                              showQuestsFilterSnapshot.hasData &&
+                                      showQuestsFilterSnapshot.data &&
+                                      questMarkersSnapshot.hasData &&
+                                      questMarkersSnapshot.data.isNotEmpty
+                                  ? MarkerLayerOptions(
+                                      markers: questMarkersSnapshot.data)
+                                  : MarkerLayerOptions(),
+                            ],
+                          );
+                        },
                       );
                     },
                   );
@@ -274,7 +281,8 @@ class _OpportunitiesMapPageState extends State<OpportunitiesMapPage> {
 
     if (userLocation != null) {
       // FOR REAL
-      List<Opportunity> opportunities = await bloc.searchNearbyOpportunities(userLocation);
+      List<Opportunity> opportunities =
+          await bloc.searchNearbyOpportunities(userLocation);
 
       for (final opportunity in opportunities) {
         if (!notifiedOpportunities.contains(opportunity.opportunityId)) {

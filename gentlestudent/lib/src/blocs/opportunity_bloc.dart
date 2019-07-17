@@ -25,20 +25,24 @@ class OpportunityBloc {
   final _opportunityNameFilter = BehaviorSubject<String>();
   final _categoryFilter = BehaviorSubject<Category>();
   final _difficultyFilter = BehaviorSubject<Difficulty>();
+  final _showQuestsFilter = BehaviorSubject<bool>();
 
   Stream<List<Opportunity>> get opportunities => _opportunities.stream;
   Stream<List<Opportunity>> get filteredOpportunities => _filteredOpportunities.stream;
   Stream<String> get opportunityNameFilter => _opportunityNameFilter.stream;
   Stream<Category> get categoryFilter => _categoryFilter.stream;
   Stream<Difficulty> get difficultyFilter => _difficultyFilter.stream;
+  Stream<bool> get showQuestsFilter => _showQuestsFilter.stream;
 
   Function(List<Opportunity>) get _changeOpportunities => _opportunities.sink.add;
   Function(List<Opportunity>) get _changeFilteredOpportunities => _filteredOpportunities.sink.add;
+  Function(bool) get changeShowQuestsFilter => _showQuestsFilter.sink.add;
 
   String get opportunityNameFilterValue => _opportunityNameFilter.value;
 
   OpportunityBloc() {
     _fetchOpportunities();
+    changeShowQuestsFilter(true);
   }
 
   Future _fetchOpportunities() async {
@@ -143,5 +147,6 @@ class OpportunityBloc {
     _opportunityNameFilter.close();
     _categoryFilter.close();
     _difficultyFilter.close();
+    _showQuestsFilter.close();
   }
 }

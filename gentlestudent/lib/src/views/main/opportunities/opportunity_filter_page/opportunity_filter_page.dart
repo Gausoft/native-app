@@ -42,18 +42,35 @@ class _OpportunityFilterPageState extends State<OpportunityFilterPage> {
       body: Container(
         child: Center(
           child: SingleChildScrollView(
-            padding: EdgeInsets.all(24),
+            padding: EdgeInsets.symmetric(vertical: 24),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 SizedBox(height: 12),
-                opportunityNameField(_opportunityBloc),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24),
+                  child: opportunityNameField(_opportunityBloc),
+                ),
                 SizedBox(height: 18),
-                difficultyPicker(_opportunityBloc),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24),
+                  child: difficultyPicker(_opportunityBloc),
+                ),
                 SizedBox(height: 12),
-                categoryPicker(_opportunityBloc),
-                SizedBox(height: 48),
-                clearFilterButton(_opportunityBloc),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24),
+                  child: categoryPicker(_opportunityBloc),
+                ),
+                SizedBox(height: 18),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: showQuestsCheckbox(_opportunityBloc),
+                ),
+                SizedBox(height: 36),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24),
+                  child: clearFilterButton(_opportunityBloc),
+                ),
                 SizedBox(height: 12),
               ],
             ),
@@ -83,6 +100,18 @@ class _OpportunityFilterPageState extends State<OpportunityFilterPage> {
           );
         },
       );
+
+  Widget showQuestsCheckbox(OpportunityBloc bloc) => StreamBuilder(
+    stream: bloc.showQuestsFilter,
+    builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+      return CheckboxListTile(
+        title: Text("Toon quests op de kaart"),
+        activeColor: Colors.lightBlueAccent,
+        value: snapshot.data ?? false,
+        onChanged: bloc.changeShowQuestsFilter,
+      );
+    },
+  );
 
   Widget categoryPicker(OpportunityBloc bloc) => StreamBuilder(
         stream: bloc.categoryFilter,

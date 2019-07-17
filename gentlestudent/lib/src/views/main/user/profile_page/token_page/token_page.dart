@@ -42,7 +42,7 @@ class TokenPage extends StatelessWidget {
     final _badgeWidth = MediaQuery.of(context).size.width / 5;
 
     return Scaffold(
-      appBar: appBar("Tokens"),
+      appBar: appBar("Mijn tokens"),
       body: StreamBuilder(
         stream: _tokenBloc.tokens,
         builder: (BuildContext context, AsyncSnapshot<List<Token>> snapshot) {
