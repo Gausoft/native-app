@@ -68,11 +68,15 @@ class StringUtils {
     return Difficulty.EXPERT;
   }
 
-  static String getAssertionCreatedDate(DateTime issuedOn) => DateTime.parse(
-              "2000-01-01") ==
-          issuedOn
-      ? "De issuer van deze leerkans heeft de badge nog niet aan jou toegekend."
-      : "Je hebt deze badge behaald op ${DateUtils.formatDate(issuedOn)}.";
+  static String getFormattedCreationDate(
+    DateTime issuedOn, [
+    bool isBadge = true,
+  ]) =>
+      isBadge
+          ? DateTime.parse("2000-01-01") == issuedOn
+              ? "De issuer van deze leerkans heeft de badge nog niet aan jou toegekend."
+              : "Je hebt deze badge behaald op ${DateUtils.formatDate(issuedOn)}."
+          : "Je hebt deze token behaald op ${DateUtils.formatDate(issuedOn)}.";
 
   static String getStatus(Participation participation) {
     switch (participation?.status) {
@@ -89,5 +93,7 @@ class StringUtils {
   }
 
   static String getReason(Participation participation) =>
-      participation == null || participation.status != Status.REFUSED ? "" : "Reden: ${participation.reason}";
+      participation == null || participation.status != Status.REFUSED
+          ? ""
+          : "Reden: ${participation.reason}";
 }

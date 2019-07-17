@@ -29,7 +29,6 @@ class QuestDetailPage extends StatelessWidget {
         child: Column(
           children: <Widget>[
             questHeader(context, _imageWidth),
-            SizedBox(height: 8),
             questMap(_mapHeight, context),
             SizedBox(height: 8),
             questInfoBox(quest),

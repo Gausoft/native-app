@@ -12,7 +12,7 @@ Future<void> showRegistrationDialog(
         return AlertDialog(
           title: Text(opportunity.title),
           content: Text(
-            'Ben je zeker dat je je voor deze leerkans wilt registreren?',
+            'Ben je zeker dat je wilt meedoen aan deze leerkans?',
           ),
           actions: <Widget>[
             FlatButton(

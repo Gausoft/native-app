@@ -1,14 +1,30 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gentlestudent/src/blocs/participant_bloc.dart';
+import 'package:gentlestudent/src/blocs/token_bloc.dart';
+import 'package:gentlestudent/src/constants/string_constants.dart';
 import 'package:gentlestudent/src/models/participant.dart';
+import 'package:gentlestudent/src/models/token.dart';
 import 'package:gentlestudent/src/views/authentication/widgets/app_bar.dart';
+import 'package:gentlestudent/src/views/main/user/profile_page/token_page/token_page.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatelessWidget {
+  void _navigateToTokenPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => TokenPage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final _participantBloc = Provider.of<ParticipantBloc>(context);
-    double headerHeight = MediaQuery.of(context).size.height / 3.5;
+    final _tokenBloc = Provider.of<TokenBloc>(context);
+    double _headerHeight = MediaQuery.of(context).size.height / 3.5;
+    double _tokenImageWidth = MediaQuery.of(context).size.width / 4;
 
     return Scaffold(
       appBar: appBar("Profiel"),
@@ -22,26 +38,57 @@ class ProfilePage extends StatelessWidget {
               return Column(
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
-                  profileHeader(snapshot.data, headerHeight, context),
+                  profileHeader(snapshot.data, _headerHeight, context),
                   Padding(
-                    padding: EdgeInsets.all(24),
+                    padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
                     child: Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: Container(
-                        padding: EdgeInsets.all(24),
-                        width: double.infinity,
-                        child: Column(
-                          children: <Widget>[
-                            profileLabel("E-mailadres:", context),
-                            SizedBox(height: 4),
-                            profileField(snapshot.data?.email ?? "", context),
-                            SizedBox(height: 12),
-                            profileLabel("Onderwijsinstelling:", context),
-                            SizedBox(height: 4),
-                            profileField(snapshot.data?.institute ?? "", context),
-                          ],
+                      elevation: 2,
+                      child: InkWell(
+                        onTap: () {},
+                        borderRadius: BorderRadius.circular(20),
+                        child: Container(
+                          padding: EdgeInsets.all(20),
+                          width: double.infinity,
+                          child: Column(
+                            children: <Widget>[
+                              profileLabel("E-mailadres:", context),
+                              SizedBox(height: 4),
+                              profileField(snapshot.data?.email ?? "", context),
+                              SizedBox(height: 12),
+                              profileLabel("Onderwijsinstelling:", context),
+                              SizedBox(height: 4),
+                              profileField(
+                                  snapshot.data?.institute ?? "", context),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(20, 10, 20, 20),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      elevation: 2,
+                      child: InkWell(
+                        onTap: () => _navigateToTokenPage(context),
+                        borderRadius: BorderRadius.circular(20),
+                        child: Container(
+                          padding: EdgeInsets.all(20),
+                          child: Row(
+                            children: <Widget>[
+                              tokenLogo(_tokenImageWidth),
+                              SizedBox(width: 20),
+                              Expanded(
+                                child: tokenText(_tokenBloc),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -55,10 +102,16 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget profileHeader(Participant participant, double headerHeight, BuildContext context) =>
+  Widget profileHeader(
+    Participant participant,
+    double headerHeight,
+    BuildContext context,
+  ) =>
       Container(
         width: double.infinity,
-        color: Theme.of(context).brightness == Brightness.dark ? Colors.black26 : Colors.lightBlueAccent,
+        color: Theme.of(context).brightness == Brightness.dark
+            ? Colors.black26
+            : Colors.lightBlueAccent,
         height: headerHeight,
         child: Column(
           mainAxisSize: MainAxisSize.max,
@@ -113,7 +166,9 @@ class ProfilePage extends StatelessWidget {
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 16,
-          color: Theme.of(context).brightness == Brightness.dark ? Colors.white70 : Colors.black45,
+          color: Theme.of(context).brightness == Brightness.dark
+              ? Colors.white70
+              : Colors.black45,
         ),
       );
 
@@ -121,7 +176,68 @@ class ProfilePage extends StatelessWidget {
         text,
         style: TextStyle(
           fontSize: 14,
-          color: Theme.of(context).brightness == Brightness.dark ? Colors.white54 : Colors.black38,
+          color: Theme.of(context).brightness == Brightness.dark
+              ? Colors.white70
+              : Colors.black45,
         ),
+      );
+
+  Widget tokenLogo(double width) => SizedBox(
+        width: width,
+        height: width,
+        child: CachedNetworkImage(
+          imageUrl: tokenGenericImageUrl,
+          placeholder: (context, message) => CircularProgressIndicator(),
+          errorWidget: (context, message, object) => Icon(Icons.error),
+        ),
+      );
+
+  Widget tokenText(TokenBloc bloc) => StreamBuilder(
+        stream: bloc.tokens,
+        builder: (BuildContext context, AsyncSnapshot<List<Token>> snapshot) {
+          if (!snapshot.hasData) {
+            return Text("");
+          }
+
+          if (snapshot.data.isEmpty) {
+            return Text(
+              "Je hebt nog geen tokens verdiend. Voltooi een quest om je eerste token te verdienen!",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white70
+                    : Colors.black45,
+              ),
+              textAlign: TextAlign.center,
+            );
+          }
+
+          return RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              style: TextStyle(
+                fontFamily: 'NeoSansPro',
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white70
+                    : Colors.black45,
+              ),
+              children: <TextSpan>[
+                TextSpan(text: "Gefelicitieerd! Je hebt al\n"),
+                TextSpan(
+                  text:
+                      "${snapshot.data.length} ${snapshot.data.length > 1 ? 'tokens' : 'token'}",
+                  style: TextStyle(
+                    color: Colors.lightBlue,
+                  ),
+                ),
+                TextSpan(text: " verdiend\n\n"),
+                TextSpan(
+                    text:
+                        "Klik hier om je\n${snapshot.data.length > 1 ? 'tokens' : 'token'} te bekijken"),
+              ],
+            ),
+          );
+        },
       );
 }

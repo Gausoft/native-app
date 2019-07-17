@@ -14,12 +14,14 @@ Future<void> displayBadgeDialog(
   Opportunity opportunity,
   Issuer issuer,
 ) async {
-  return showDialog<Null>(
+  return showDialog<void>(
     context: context,
-    barrierDismissible: true,
     builder: (BuildContext context) {
       return AlertDialog(
-        contentPadding: EdgeInsets.fromLTRB(2, 7, 2, 2),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        contentPadding: EdgeInsets.all(12),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -54,14 +56,12 @@ Future<void> displayBadgeDialog(
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               child: Text(
-                StringUtils.getAssertionCreatedDate(assertion.issuedOn),
+                StringUtils.getFormattedCreationDate(assertion.issuedOn),
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 14),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 15),
-              child: RaisedButton(
+              RaisedButton(
                 child: Text(
                   "Bekijk op het web",
                   style: TextStyle(color: Colors.white, fontSize: 16),
@@ -73,7 +73,6 @@ Future<void> displayBadgeDialog(
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-            ),
           ],
         ),
       );

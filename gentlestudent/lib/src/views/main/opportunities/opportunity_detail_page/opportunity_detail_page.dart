@@ -188,7 +188,7 @@ class OpportunityDetailPage extends StatelessWidget {
             return Container(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
               child: Text(
-                "Je doet mee aan deze leerkans",
+                "Je doet al mee aan deze leerkans",
                 textAlign: TextAlign.center,
               ),
             );
