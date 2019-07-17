@@ -242,19 +242,19 @@ class _OpportunitiesMapPageState extends State<OpportunitiesMapPage> {
                                       : 'mapbox.streets',
                                 },
                               ),
-                              MarkerLayerOptions(
-                                  markers: opportunityMarkersSnapshot.data),
-                              _userLocation != null &&
-                                      _userLocation.latitude != null &&
-                                      _userLocation.longitude != null
-                                  ? userLocationMarker(_userLocation)
-                                  : MarkerLayerOptions(),
                               showQuestsFilterSnapshot.hasData &&
                                       showQuestsFilterSnapshot.data &&
                                       questMarkersSnapshot.hasData &&
                                       questMarkersSnapshot.data.isNotEmpty
                                   ? MarkerLayerOptions(
                                       markers: questMarkersSnapshot.data)
+                                  : MarkerLayerOptions(),
+                              MarkerLayerOptions(
+                                  markers: opportunityMarkersSnapshot.data),
+                              _userLocation != null &&
+                                      _userLocation.latitude != null &&
+                                      _userLocation.longitude != null
+                                  ? userLocationMarker(_userLocation)
                                   : MarkerLayerOptions(),
                             ],
                           );
