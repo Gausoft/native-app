@@ -1,15 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:gentlestudent/src/models/badge.dart';
-import 'package:gentlestudent/src/models/issuer.dart';
-import 'package:gentlestudent/src/models/opportunity.dart';
-import 'package:gentlestudent/src/utils/string_utils.dart';
+import 'package:gentlestudent/src/constants/string_constants.dart';
+import 'package:gentlestudent/src/models/quest.dart';
 
-Future<void> displayOpportunity(BuildContext context, Opportunity opportunity,
-    Issuer issuer, Badge badge, Function onPressed) async {
+Future<void> displayQuestMarkerDialog(BuildContext context, Quest quest, Function onPressed) async {
   return showDialog<void>(
     context: context,
-    barrierDismissible: true,
     builder: (BuildContext context) {
       return AlertDialog(
         contentPadding: EdgeInsets.all(2),
@@ -21,14 +17,13 @@ Future<void> displayOpportunity(BuildContext context, Opportunity opportunity,
               ListTile(
                 contentPadding: EdgeInsets.only(left: 14, right: 8),
                 leading: CachedNetworkImage(
-                  imageUrl: badge.image,
+                  imageUrl: questCircleImageUrl,
                   fit: BoxFit.fill,
-                  placeholder: (context, message) =>
-                      CircularProgressIndicator(),
+                  placeholder: (context, message) => CircularProgressIndicator(),
                   errorWidget: (context, message, object) => Icon(Icons.error),
                 ),
                 title: Text(
-                  opportunity.title,
+                  quest.title,
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).brightness == Brightness.dark
@@ -36,21 +31,12 @@ Future<void> displayOpportunity(BuildContext context, Opportunity opportunity,
                           : Colors.black54,
                       fontSize: 16),
                 ),
-                subtitle: Text(
-                  StringUtils.getCategory(opportunity) +
-                      "\n" +
-                      StringUtils.getDifficulty(opportunity) +
-                      "\n" +
-                      issuer.name,
-                  style: TextStyle(fontSize: 12),
-                ),
-                isThreeLine: true,
                 dense: false,
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                padding: EdgeInsets.fromLTRB(12, 12, 12, 0),
                 child: Text(
-                  opportunity.shortDescription,
+                  quest.description,
                   textAlign: TextAlign.start,
                   style: TextStyle(fontSize: 14),
                   maxLines: 5,

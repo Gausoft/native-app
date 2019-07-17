@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gentlestudent/src/blocs/quest_bloc.dart';
 import 'package:gentlestudent/src/models/quest.dart';
-import 'package:gentlestudent/src/views/main/user/quest_page/widget/quest_list_item.dart';
+import 'package:gentlestudent/src/views/main/user/quest_page/widgets/quest_list_item.dart';
 import 'package:gentlestudent/src/widgets/loading_spinner.dart';
 import 'package:provider/provider.dart';
 

@@ -34,13 +34,13 @@ class OpportunityDetailPage extends StatelessWidget {
     isSucces
         ? genericRegistrationDialog(
             context,
-            "Registratie",
-            "Je bent succesvol geregistreerd voor deze leerkans!",
+            "Doe mee",
+            "Je doet nu mee aan deze leerkans!",
           )
         : genericRegistrationDialog(
             context,
-            "Registratie",
-            "Er ging iets mis bij het registreren voor deze leerkans, probeer het opnieuw.",
+            "Doe mee",
+            "Er ging iets mis bij het inschrijven voor deze leerkans, probeer het opnieuw.",
           );
   }
 
@@ -95,7 +95,7 @@ class OpportunityDetailPage extends StatelessWidget {
     final imageWidth = MediaQuery.of(context).size.width / 5;
 
     return Scaffold(
-      appBar: appBar("Registreren"),
+      appBar: appBar("Doe mee"),
       body: ListView(
         children: <Widget>[
           opportunityHeader(
@@ -165,7 +165,7 @@ class OpportunityDetailPage extends StatelessWidget {
           // There isn't a participation yet, so the user can enroll in the learning opportunity.
           if (snapshot.data.opportunityId == null) {
             return opportunityButton(
-              "Registreer voor deze leerkans",
+              "Doe mee aan deze leerkans",
               () => showRegistrationDialog(
                 context,
                 opportunity,
@@ -188,7 +188,7 @@ class OpportunityDetailPage extends StatelessWidget {
             return Container(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
               child: Text(
-                "Je bent geregistreerd voor deze leerkans",
+                "Je doet mee aan deze leerkans",
                 textAlign: TextAlign.center,
               ),
             );

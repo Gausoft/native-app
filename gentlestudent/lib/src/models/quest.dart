@@ -7,6 +7,7 @@ class Quest {
   final String title;
   final String description;
   QuestStatus questStatus;
+  final String questGiver;
   final String questGiverId;
   final Timestamp created;
   final String phoneNumber;
@@ -19,6 +20,7 @@ class Quest {
     this.title,
     this.description,
     this.questStatus,
+    this.questGiver,
     this.questGiverId,
     this.created,
     this.phoneNumber,
@@ -35,8 +37,9 @@ class Quest {
       title: data['title'],
       description: data['description'],
       questStatus: FirebaseUtils.dataToQuestStatus(data['questStatus']),
+      questGiver: data['questGiver'],
       questGiverId: data['questGiverId'],
-      created: data['createdTimeStamp'],
+      created: data['created'],
       phoneNumber: data['phoneNumber'],
       emailAddress: data['emailAddress'],
       latitude: data['latitude'].runtimeType == double ? data['latitude'] : 0,

@@ -17,7 +17,7 @@ class QuestApi {
 
   Future<Quest> fetchQuestById(String questId) async {
     return Quest.fromDocumentSnapshot(await Firestore.instance
-        .collection("Addresses")
+        .collection("Quests")
         .document(questId)
         .get());
   }

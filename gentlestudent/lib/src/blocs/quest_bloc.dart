@@ -46,6 +46,10 @@ class QuestBloc {
           _changeInProgressQuests(inProgressQuests);
         }
       }
+    } else {
+      _changeQuests([]);
+      _changeAvailableQuests([]);
+      _changeInProgressQuests([]);
     }
   }
 

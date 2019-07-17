@@ -5,6 +5,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gentlestudent/src/blocs/opportunity_bloc.dart';
 import 'package:gentlestudent/src/blocs/quest_bloc.dart';
+import 'package:gentlestudent/src/constants/string_constants.dart';
 import 'package:gentlestudent/src/models/address.dart';
 import 'package:gentlestudent/src/models/badge.dart';
 import 'package:gentlestudent/src/models/issuer.dart';
@@ -12,7 +13,9 @@ import 'package:gentlestudent/src/models/opportunity.dart';
 import 'package:gentlestudent/src/models/quest.dart';
 import 'package:gentlestudent/src/models/user_location.dart';
 import 'package:gentlestudent/src/views/main/opportunities/opportunities_map_page/widgets/opportunity_marker_dialog.dart';
+import 'package:gentlestudent/src/views/main/opportunities/opportunities_map_page/widgets/quest_marker_dialog.dart';
 import 'package:gentlestudent/src/views/main/opportunities/opportunity_detail_page/opportunity_detail_page.dart';
+import 'package:gentlestudent/src/views/main/user/quest_page/quest_detail_page/quest_detail_page.dart';
 import 'package:gentlestudent/src/widgets/loading_spinner.dart';
 import 'package:latlong/latlong.dart';
 import 'package:provider/provider.dart';
@@ -40,7 +43,7 @@ class _OpportunitiesMapPageState extends State<OpportunitiesMapPage> {
           height: 100,
           point: LatLng(address.latitude, address.longitude),
           builder: (context) => GestureDetector(
-            onTap: () => _onMarkerTap(context, opportunities[i], bloc),
+            onTap: () => _onOpportunityMarkerTap(context, opportunities[i], bloc),
             child: Container(
               child: CachedNetworkImage(
                 imageUrl: opportunities[i].pinImageUrl,
@@ -63,28 +66,20 @@ class _OpportunitiesMapPageState extends State<OpportunitiesMapPage> {
       for (int i = 0; i < quests.length; i++) {
         markers.add(
           Marker(
-            point: LatLng(quests[i].latitude, quests[i].longitude),
-            builder: (context) => Container(
-              child: Stack(
-                children: <Widget>[
-                  Center(
-                    child: Icon(
-                      FontAwesomeIcons.solidCircle,
-                      color: Colors.yellow.shade300,
-                      size: 30,
-                    ),
-                  ),
-                  Center(
-                    child: Icon(
-                      FontAwesomeIcons.questionCircle,
-                      color: Colors.black87,
-                      size: 30,
-                    ),
-                  ),
-                ],
+          width: 35,
+          height: 35,
+          point: LatLng(quests[i].latitude, quests[i].longitude),
+          builder: (context) => GestureDetector(
+            onTap: () => _onQuestMarkerTap(context, quests[i]),
+            child: Container(
+              child: CachedNetworkImage(
+                imageUrl: questCircleImageUrl,
+                placeholder: (context, message) => CircularProgressIndicator(),
+                errorWidget: (context, message, object) => Icon(Icons.error),
               ),
             ),
           ),
+        ),
         );
       }
     }
@@ -123,7 +118,7 @@ class _OpportunitiesMapPageState extends State<OpportunitiesMapPage> {
         ],
       );
 
-  Future<void> _onMarkerTap(
+  Future<void> _onOpportunityMarkerTap(
     BuildContext context,
     Opportunity opportunity,
     OpportunityBloc bloc,
@@ -143,6 +138,20 @@ class _OpportunitiesMapPageState extends State<OpportunitiesMapPage> {
     );
   }
 
+  Future<void> _onQuestMarkerTap(
+    BuildContext context,
+    Quest quest,
+  ) async {
+    displayQuestMarkerDialog(
+      context,
+      quest,
+      () => {
+        Navigator.of(context).pop(),
+        _navigateToQuestDetailPage(quest)
+      }
+    );
+  }
+
   void _navigateToOpportunityDetailPage(Opportunity opportunity) {
     Navigator.push(
       context,
@@ -153,18 +162,25 @@ class _OpportunitiesMapPageState extends State<OpportunitiesMapPage> {
     );
   }
 
+  void _navigateToQuestDetailPage(Quest quest) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) =>
+            QuestDetailPage(quest),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
 
-    final initializationSettingsAndroid =
-        AndroidInitializationSettings('gentlestudent_logo');
+    final initializationSettingsAndroid = AndroidInitializationSettings('gentlestudent_logo');
     final initializationSettingsIOS = IOSInitializationSettings();
-    final initializationSettings = InitializationSettings(
-        initializationSettingsAndroid, initializationSettingsIOS);
+    final initializationSettings = InitializationSettings(initializationSettingsAndroid, initializationSettingsIOS);
     _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    _flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: onSelectNotification);
+    _flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
   }
 
   @override
@@ -253,14 +269,12 @@ class _OpportunitiesMapPageState extends State<OpportunitiesMapPage> {
     OpportunityBloc bloc,
   ) async {
     // FOR TESTING
-    UserLocation fakeLocation =
-        UserLocation(latitude: 51.03563520797982, longitude: 3.721189648657173);
-    List<Opportunity> opportunities =
-        await bloc.searchNearbyOpportunities(fakeLocation);
+    // UserLocation fakeLocation = UserLocation(latitude: 51.03563520797982, longitude: 3.721189648657173);
+    // List<Opportunity> opportunities = await bloc.searchNearbyOpportunities(fakeLocation);
 
     if (userLocation != null) {
       // FOR REAL
-      // List<Opportunity> opportunities = await bloc.searchNearbyOpportunities(userLocation);
+      List<Opportunity> opportunities = await bloc.searchNearbyOpportunities(userLocation);
 
       for (final opportunity in opportunities) {
         if (!notifiedOpportunities.contains(opportunity.opportunityId)) {

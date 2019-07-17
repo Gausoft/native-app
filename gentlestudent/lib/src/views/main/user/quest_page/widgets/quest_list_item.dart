@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gentlestudent/src/blocs/quest_bloc.dart';
 import 'package:gentlestudent/src/models/quest.dart';
 import 'package:gentlestudent/src/models/quest_taker.dart';
+import 'package:gentlestudent/src/views/main/user/quest_page/quest_detail_page/quest_detail_page.dart';
+import 'package:gentlestudent/src/views/main/user/quest_page/widgets/quest_logo.dart';
+import 'package:gentlestudent/src/views/main/user/quest_page/widgets/quest_title.dart';
 import 'package:provider/provider.dart';
 
 class QuestListItem extends StatelessWidget {
@@ -11,25 +13,35 @@ class QuestListItem extends StatelessWidget {
 
   QuestListItem(this.quest, [this.isInProgress = false]);
 
+  void _navigateToQuestDetailPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => QuestDetailPage(quest),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final _questBloc = Provider.of<QuestBloc>(context);
+    final _imageWidth = MediaQuery.of(context).size.width / 5;
 
     return Card(
       margin: EdgeInsets.only(bottom: 8),
-      elevation: 3,
+      elevation: 4,
       child: InkWell(
-        onTap: () {},
+        onTap: () => _navigateToQuestDetailPage(context),
         child: Row(
           children: <Widget>[
-            Icon(FontAwesomeIcons.questionCircle),
+            questLogo(_imageWidth),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.fromLTRB(10, 10, 6, 10),
+                padding: EdgeInsets.all(12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    questTitle(context),
+                    questTitle(context, quest),
                     SizedBox(height: 4),
                     questSubtitle(_questBloc),
                   ],
@@ -41,18 +53,6 @@ class QuestListItem extends StatelessWidget {
       ),
     );
   }
-
-  Widget questTitle(BuildContext context) => Text(
-        quest.title,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Theme.of(context).brightness == Brightness.dark
-              ? Colors.white
-              : Colors.black54,
-          fontSize: 21,
-        ),
-        textAlign: TextAlign.start,
-      );
 
   Widget questSubtitle(QuestBloc bloc) => !isInProgress
       ? Text(
