@@ -61,6 +61,7 @@ Future<void> displayBadgeDialog(
                 style: TextStyle(fontSize: 14),
               ),
             ),
+            SizedBox(height: 8),
             RaisedButton(
               child: Text(
                 "Bekijk op het web",
