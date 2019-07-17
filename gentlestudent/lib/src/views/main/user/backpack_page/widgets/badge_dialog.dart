@@ -61,18 +61,18 @@ Future<void> displayBadgeDialog(
                 style: TextStyle(fontSize: 14),
               ),
             ),
-              RaisedButton(
-                child: Text(
-                  "Bekijk op het web",
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ),
-                color: Colors.lightBlueAccent,
-                onPressed: () => WebLauncherUtils.launchBackpack(),
-                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
+            RaisedButton(
+              child: Text(
+                "Bekijk op het web",
+                style: TextStyle(color: Colors.white, fontSize: 16),
               ),
+              color: Colors.lightBlueAccent,
+              onPressed: () => WebLauncherUtils.launchBackpack(),
+              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
           ],
         ),
       );

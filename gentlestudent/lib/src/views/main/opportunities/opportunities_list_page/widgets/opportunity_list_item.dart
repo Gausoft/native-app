@@ -33,10 +33,14 @@ class OpportunityListItem extends StatelessWidget {
     }
 
     return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
       margin: EdgeInsets.only(bottom: 8),
       elevation: 3,
       child: Container(
         child: InkWell(
+          borderRadius: BorderRadius.circular(8),
           onTap: _navigateToOpportunityDetailPage,
           child: Row(
             children: <Widget>[

@@ -28,9 +28,13 @@ class QuestListItem extends StatelessWidget {
     final _imageWidth = MediaQuery.of(context).size.width / 5;
 
     return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
       margin: EdgeInsets.only(bottom: 8),
       elevation: 4,
       child: InkWell(
+        borderRadius: BorderRadius.circular(8),
         onTap: () => _navigateToQuestDetailPage(context),
         child: Row(
           children: <Widget>[
