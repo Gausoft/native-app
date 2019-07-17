@@ -17,6 +17,7 @@ class _OpportunityFilterPageState extends State<OpportunityFilterPage> {
     bloc.changeOpportunityName("");
     bloc.changeCategory(null);
     bloc.changeDifficulty(null);
+    bloc.changeShowQuestsFilter(true);
   }
 
   @override
