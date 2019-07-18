@@ -121,11 +121,17 @@ class MyQuestPage extends StatelessWidget {
         builder:
             (BuildContext context, AsyncSnapshot<List<QuestTaker>> snapshot) {
           if (!snapshot.hasData) {
-            return loadingSpinner();
+            return Container(
+              padding: EdgeInsets.symmetric(horizontal: 22, vertical: 8),
+              child: loadingSpinner(),
+            );
           }
 
           if (snapshot.data.isEmpty) {
-            return Text("Nog niemand heeft zich ingeschreven.");
+            return Container(
+              padding: EdgeInsets.symmetric(horizontal: 22, vertical: 8),
+              child: Text("Nog niemand heeft zich ingeschreven."),
+            );
           }
 
           return Container(

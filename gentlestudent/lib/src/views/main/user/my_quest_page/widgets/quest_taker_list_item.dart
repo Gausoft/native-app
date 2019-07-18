@@ -1,15 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:gentlestudent/src/blocs/quest_bloc.dart';
 import 'package:gentlestudent/src/models/quest_taker.dart';
 import 'package:gentlestudent/src/utils/date_utils.dart';
+import 'package:gentlestudent/src/views/main/user/my_quest_page/widgets/select_quest_taker_dialog.dart';
 import 'package:gentlestudent/src/views/main/user/quest_page/widgets/quest_logo.dart';
+import 'package:gentlestudent/src/widgets/generic_dialog.dart';
+import 'package:provider/provider.dart';
 
 class QuestTakerListItem extends StatelessWidget {
   final QuestTaker questTaker;
 
   QuestTakerListItem(this.questTaker);
 
+  Future<void> appointQuestTakerToQuest(
+      QuestBloc bloc, BuildContext context) async {
+    bool shouldAppointQuestTaker = await showSelectQuestTakerDialog(context,
+        "Ben je zeker dat je ${questTaker.participantName} wilt kiezen om de quest uit te voeren?");
+
+    if (shouldAppointQuestTaker == null || !shouldAppointQuestTaker) return;
+
+    bool isSucces = await bloc.appointQuestTakerToQuest(questTaker);
+
+    isSucces
+        ? genericDialog(context, "Kandidaat gekozen",
+            "Je hebt succesvol ${questTaker.participantName} gekozen om de quest uit te voeren. Deze persoon werd hiervan via mail op de hoogte gebracht.")
+        : genericDialog(context, "Kies een kandidaat",
+            "Er is een fout opgetreden bij het kiezen van een kandidaat voor het uitvoeren van de quest. Gelieve het later nog eens te proberen.");
+  }
+
   @override
   Widget build(BuildContext context) {
+    final _questBloc = Provider.of<QuestBloc>(context);
     final _imageWidth = MediaQuery.of(context).size.width / 5;
 
     return Card(
@@ -20,10 +41,11 @@ class QuestTakerListItem extends StatelessWidget {
       elevation: 4,
       child: InkWell(
         borderRadius: BorderRadius.circular(8),
-        onTap: () => {},
+        onTap: () => appointQuestTakerToQuest(_questBloc, context),
         child: Row(
           children: <Widget>[
-            questLogo(_imageWidth),
+            questLogo(_imageWidth,
+                "https://cdn1.iconfinder.com/data/icons/gaming-3-1/128/102-512.png"),
             Expanded(
               child: Padding(
                 padding: EdgeInsets.all(12),
@@ -44,18 +66,18 @@ class QuestTakerListItem extends StatelessWidget {
   }
 
   Widget questTakerName(BuildContext context) => Text(
-      questTaker.participantName,
-      style: TextStyle(
-        fontWeight: FontWeight.bold,
-        color: Theme.of(context).brightness == Brightness.dark
-            ? Colors.white
-            : Colors.black54,
-        fontSize: 21,
-      ),
-      textAlign: TextAlign.start,
-      maxLines: 2,
-      overflow: TextOverflow.ellipsis,
-    );
+        questTaker.participantName,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Theme.of(context).brightness == Brightness.dark
+              ? Colors.white
+              : Colors.black54,
+          fontSize: 21,
+        ),
+        textAlign: TextAlign.start,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+      );
 
   Widget questTakerParticipationDate() => Text(
         "Ingeschreven op ${DateUtils.formatDate(questTaker.participatedOn.toDate())}\nom ${DateUtils.formatTime(questTaker.participatedOn.toDate())}",

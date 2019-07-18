@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gentlestudent/src/models/enums/quest_status.dart';
 import 'package:gentlestudent/src/models/quest.dart';
 import 'package:gentlestudent/src/models/quest_taker.dart';
 import 'package:gentlestudent/src/network/quest_api.dart';
@@ -98,6 +99,14 @@ class QuestRepository {
     await _questApi.createQuest(user, title, description, email, phone, latitude, longitude);
     await _fetchCurrentQuestOfUser();
     return _currentQuest != null && _currentQuest.questId!= null;
+  }
+
+  Future<bool> appointQuestTakerToQuest(Quest quest, QuestTaker questTaker) async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    if (user == null || user.uid != quest.questGiverId) return false;
+
+    await _questApi.appointQuestTakerToQuest(quest, questTaker);
+    return true;
   }
 
   void clearQuests() {

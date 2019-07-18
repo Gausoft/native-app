@@ -93,6 +93,15 @@ class QuestBloc {
     return isSucces;
   }
 
+  Future<bool> appointQuestTakerToQuest(QuestTaker questTaker) async {
+    Quest quest = _currentQuestOfUser.value;
+    if (quest == null || quest.questId == null) return false;
+
+    bool isSucces = await _questRepository.appointQuestTakerToQuest(quest, questTaker);
+
+    return isSucces;
+  }
+
   void onSignOut() {
     _changeCurrentQuestOfUser(null);
     _questRepository.clearQuests();
