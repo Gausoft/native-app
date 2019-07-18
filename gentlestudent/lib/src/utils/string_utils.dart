@@ -3,6 +3,7 @@ import 'package:gentlestudent/src/models/enums/difficulty.dart';
 import 'package:gentlestudent/src/models/enums/status.dart';
 import 'package:gentlestudent/src/models/opportunity.dart';
 import 'package:gentlestudent/src/models/participation.dart';
+import 'package:gentlestudent/src/models/quest.dart';
 import 'package:gentlestudent/src/utils/date_utils.dart';
 
 class StringUtils {
@@ -71,12 +72,13 @@ class StringUtils {
   static String getFormattedCreationDate(
     DateTime issuedOn, [
     bool isBadge = true,
+    Quest quest,
   ]) =>
       isBadge
           ? DateTime.parse("2000-01-01") == issuedOn
               ? "De issuer van deze leerkans heeft de badge nog niet aan jou toegekend."
               : "Je hebt deze badge behaald op ${DateUtils.formatDate(issuedOn)}."
-          : "Je hebt deze token behaald op ${DateUtils.formatDate(issuedOn)}.";
+          : "Deze token kreeg je van ${quest.questGiver} op ${DateUtils.formatDate(issuedOn)} door de bovenstaande quest te voltooien.";
 
   static String getStatus(Participation participation) {
     switch (participation?.status) {

@@ -11,11 +11,11 @@ import 'package:gentlestudent/src/models/issuer.dart';
 import 'package:gentlestudent/src/models/opportunity.dart';
 import 'package:gentlestudent/src/models/participation.dart';
 import 'package:gentlestudent/src/views/authentication/widgets/app_bar.dart';
-import 'package:gentlestudent/src/views/main/opportunities/opportunity_detail_page/widgets/generic_registration_dialog.dart';
 import 'package:gentlestudent/src/views/main/opportunities/opportunity_detail_page/widgets/opportunity_header.dart';
 import 'package:gentlestudent/src/views/main/opportunities/opportunity_detail_page/widgets/opportunity_info_box.dart';
 import 'package:gentlestudent/src/views/main/opportunities/opportunity_detail_page/widgets/show_claim_badge_dialog.dart';
 import 'package:gentlestudent/src/views/main/opportunities/opportunity_detail_page/widgets/show_registration_dialog.dart';
+import 'package:gentlestudent/src/widgets/generic_dialog.dart';
 import 'package:gentlestudent/src/widgets/loading_spinner.dart';
 import 'package:provider/provider.dart';
 
@@ -32,12 +32,12 @@ class OpportunityDetailPage extends StatelessWidget {
     Issuer issuer = await opportunityBloc.getIssuerOfOpportunity(opportunity);
     final isSucces = await participationBloc.enrollInOpportunity(opportunity, issuer);
     isSucces
-        ? genericRegistrationDialog(
+        ? genericDialog(
             context,
             "Doe mee",
             "Je doet nu mee aan deze leerkans!",
           )
-        : genericRegistrationDialog(
+        : genericDialog(
             context,
             "Doe mee",
             "Er ging iets mis bij het inschrijven voor deze leerkans, probeer het opnieuw.",
@@ -52,7 +52,7 @@ class OpportunityDetailPage extends StatelessWidget {
   ) async {
     String message = await showClaimBadgeDialog(context);
     if (message == "") {
-      genericRegistrationDialog(
+      genericDialog(
         context,
         "Claim badge",
         "Het veld was leeg. Je moet aantonen waarom je in aanmerking komt voor deze badge.",
@@ -65,18 +65,18 @@ class OpportunityDetailPage extends StatelessWidget {
             await participationBloc.updateParticipationAfterBadgeClaim(message);
 
         isAssertionCreationSucces && isUpdateSucces
-            ? genericRegistrationDialog(
+            ? genericDialog(
                 context,
                 "Claim badge",
                 "Je hebt de badge succesvol geclaimd! Deze is nu zichbaar in je backpack.",
               )
-            : genericRegistrationDialog(
+            : genericDialog(
                 context,
                 "Claim badge",
                 "Er is iets fout gegaan tijdens het claimen van de badge. Controleer je internetverbinding en probeer het opnieuw.",
               );
       } else {
-        genericRegistrationDialog(
+        genericDialog(
           context,
           "Claim badge",
           "Er is iets fout gegaan tijdens het claimen van de badge. Controleer je internetverbinding en probeer het opnieuw.",

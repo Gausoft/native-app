@@ -38,7 +38,7 @@ class QuestApi {
     return (await Firestore.instance
             .collection("QuestTakers")
             .where("participantId", isEqualTo: userId)
-            .where("acceptedOn", isGreaterThan: Timestamp.fromDate(yesterday))
+            .where("participatedOn", isGreaterThan: Timestamp.fromDate(yesterday))
             .getDocuments())
         .documents
         .map((snapshot) => QuestTaker.fromDocumentSnapshot(snapshot))
@@ -56,5 +56,22 @@ class QuestApi {
         .toList();
     
     return questTakers != null && questTakers.isNotEmpty ? questTakers.first : null;
+  }
+
+  Future<void> enrollInQuest(String userId, String questId) async {
+    Map<String, dynamic> data = <String, dynamic>{
+      "isDoingQuest": false,
+      "questId": questId,
+      "participantId": userId,
+      "participatedOn": Timestamp.now(),
+    };
+
+    final CollectionReference collection = Firestore.instance.collection("QuestTakers");
+    collection.add(data).catchError((e) => print(e));
+  }
+
+  Future<void> disenrollInQuest(String questTakerId) async {
+    final CollectionReference collection = Firestore.instance.collection("QuestTakers");
+    await collection.document(questTakerId).delete().catchError((e) => print(e));
   }
 }

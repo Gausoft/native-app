@@ -70,7 +70,7 @@ class QuestListItem extends StatelessWidget {
           builder: (BuildContext context, AsyncSnapshot<QuestTaker> snapshot) {
             if (!snapshot.hasData || snapshot.data == null) {
               return Text(
-                "Status:",
+                "Status: ...",
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.start,
@@ -79,8 +79,8 @@ class QuestListItem extends StatelessWidget {
 
             return Text(
               snapshot.data.isDoingQuest
-                  ? "Status: Goedgekeurd"
-                  : "Status: In afwachting",
+                  ? "Status: Gekozen"
+                  : "Status: Niet gekozen",
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.start,

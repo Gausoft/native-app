@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Future<void> genericRegistrationDialog(
+Future<void> genericDialog(
   BuildContext context,
   String title,
   String message,

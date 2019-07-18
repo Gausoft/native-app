@@ -54,7 +54,7 @@ Future<void> displayTokenDialog(
               padding: EdgeInsets.all(12),
               child: Text(
                 StringUtils.getFormattedCreationDate(
-                    token.issuedOn.toDate(), false),
+                    token.issuedOn.toDate(), false, quest,),
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 14),
               ),
