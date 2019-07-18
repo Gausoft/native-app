@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:gentlestudent/src/blocs/quest_bloc.dart';
 import 'package:gentlestudent/src/models/quest.dart';
 import 'package:gentlestudent/src/views/main/user/my_quest_page/create_quest_page/create_quest_page.dart';
+import 'package:gentlestudent/src/views/main/user/quest_page/quest_detail_page/widgets/quest_description.dart';
+import 'package:gentlestudent/src/views/main/user/quest_page/quest_detail_page/widgets/quest_header.dart';
+import 'package:gentlestudent/src/views/main/user/quest_page/quest_detail_page/widgets/quest_info_box.dart';
+import 'package:gentlestudent/src/views/main/user/quest_page/quest_detail_page/widgets/quest_map.dart';
 import 'package:gentlestudent/src/widgets/loading_spinner.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +22,8 @@ class MyQuestPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _questBloc = Provider.of<QuestBloc>(context);
+    final _imageWidth = MediaQuery.of(context).size.width / 8;
+    final _mapHeight = MediaQuery.of(context).size.width * 2 / 3;
 
     return StreamBuilder(
       stream: _questBloc.currentQuestOfUser,
@@ -25,13 +31,18 @@ class MyQuestPage extends StatelessWidget {
         return Scaffold(
           appBar: myQuestPageAppbar(snapshot, context),
           body: Container(
-            padding: EdgeInsets.all(24),
             child: !snapshot.hasData
-                ? loadingSpinner()
+                ? Container(
+                    child: loadingSpinner(),
+                  )
                 : snapshot.data.questId == null || snapshot.data.questId == ""
                     ? noQuestBody()
-                    : Center(
-                        child: Text("Jeej er is een quest van jou"),
+                    : questBody(
+                        _questBloc,
+                        _imageWidth,
+                        _mapHeight,
+                        context,
+                        snapshot.data,
                       ),
           ),
         );
@@ -39,7 +50,9 @@ class MyQuestPage extends StatelessWidget {
     );
   }
 
-  Widget myQuestPageAppbar(AsyncSnapshot<Quest> snapshot, BuildContext context) => AppBar(
+  Widget myQuestPageAppbar(
+          AsyncSnapshot<Quest> snapshot, BuildContext context) =>
+      AppBar(
         centerTitle: true,
         title: Text("Mijn quest", style: TextStyle(color: Colors.white)),
         iconTheme: IconThemeData(color: Colors.white),
@@ -55,11 +68,36 @@ class MyQuestPage extends StatelessWidget {
             : <Widget>[],
       );
 
-  Widget noQuestBody() => Center(
-        child: Text(
-          "Je hebt momenteel geen actieve quest. Als je er een quest wilt aanmaken, kan je op het '+' icoontje rechtsbovenaan klikken",
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16),
+  Widget noQuestBody() => Container(
+        padding: EdgeInsets.all(24),
+        child: Center(
+          child: Text(
+            "Je hebt momenteel geen actieve quest. Als je er een quest wilt aanmaken, kan je op het '+' icoontje rechtsbovenaan klikken",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16),
+          ),
         ),
       );
+
+  Widget questBody(
+    QuestBloc bloc,
+    double imageWidth,
+    double mapHeight,
+    BuildContext context,
+    Quest quest,
+  ) =>
+      SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            questHeader(context, imageWidth, quest),
+            questMap(mapHeight, context, quest),
+            SizedBox(height: 8),
+            questInfoBox(quest),
+            SizedBox(height: 8),
+            questDescription(quest),
+          ],
+        ),
+      );
+
+  
 }
