@@ -5,6 +5,7 @@ import 'package:gentlestudent/src/blocs/main_navigation_bloc.dart';
 import 'package:gentlestudent/src/blocs/opportunity_navigation_bloc.dart';
 import 'package:gentlestudent/src/blocs/participant_bloc.dart';
 import 'package:gentlestudent/src/blocs/participation_bloc.dart';
+import 'package:gentlestudent/src/blocs/quest_bloc.dart';
 import 'package:gentlestudent/src/blocs/token_bloc.dart';
 import 'package:gentlestudent/src/constants/color_constants.dart';
 import 'package:gentlestudent/src/views/authentication/widgets/app_bar.dart';
@@ -59,6 +60,7 @@ class _SettingsPageState extends State<SettingsPage> {
     final _oppNavBloc = Provider.of<OpportunityNavigationBloc>(context);
     final _participationBloc = Provider.of<ParticipationBloc>(context);
     final _assertionBloc = Provider.of<AssertionBloc>(context);
+    final _questBloc = Provider.of<QuestBloc>(context);
     final _tokenBloc = Provider.of<TokenBloc>(context);
 
     return Scaffold(
@@ -87,6 +89,7 @@ class _SettingsPageState extends State<SettingsPage> {
               _oppNavBloc,
               _assertionBloc,
               _participationBloc,
+              _questBloc,
               _tokenBloc,
             ),
           ),

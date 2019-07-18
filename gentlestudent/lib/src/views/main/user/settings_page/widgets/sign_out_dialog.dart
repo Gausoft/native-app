@@ -5,6 +5,7 @@ import 'package:gentlestudent/src/blocs/main_navigation_bloc.dart';
 import 'package:gentlestudent/src/blocs/opportunity_navigation_bloc.dart';
 import 'package:gentlestudent/src/blocs/participant_bloc.dart';
 import 'package:gentlestudent/src/blocs/participation_bloc.dart';
+import 'package:gentlestudent/src/blocs/quest_bloc.dart';
 import 'package:gentlestudent/src/blocs/token_bloc.dart';
 import 'package:gentlestudent/src/views/authentication/login_page.dart';
 
@@ -15,6 +16,7 @@ Future<void> showSignOutDialog(
   OpportunityNavigationBloc opportunityNavigationBloc,
   AssertionBloc assertionBloc,
   ParticipationBloc participationBloc,
+  QuestBloc questBloc,
   TokenBloc tokenBloc,
 ) async {
   return showDialog<Null>(
@@ -42,6 +44,7 @@ Future<void> showSignOutDialog(
               opportunityNavigationBloc.changeCurrentIndex(0);
               assertionBloc.onSignOut();
               participationBloc.onSignOut();
+              questBloc.onSignOut();
               tokenBloc.onSignOut();
 
               Navigator.pushAndRemoveUntil(

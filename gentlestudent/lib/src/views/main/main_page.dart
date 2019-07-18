@@ -30,6 +30,7 @@ class MainPage extends StatelessWidget {
     _participationBloc.fetchParticipations();
     _questBloc.fetchQuests();
     _tokenBloc.fetchTokens();
+    _questBloc.fetchCurrentQuestOfUser();
 
     return StreamBuilder(
       stream: _mainNavigationBloc.currentIndex,

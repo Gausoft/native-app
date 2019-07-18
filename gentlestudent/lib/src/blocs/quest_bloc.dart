@@ -10,16 +10,19 @@ class QuestBloc {
   final _availableQuests = BehaviorSubject<List<Quest>>();
   final _inProgressQuests = BehaviorSubject<List<Quest>>();
   final _questsUserIsDoing = BehaviorSubject<List<QuestTaker>>();
+  final _currentQuestOfUser = BehaviorSubject<Quest>();
 
   Stream<List<Quest>> get quests => _quests.stream;
   Stream<List<Quest>> get availableQuests => _availableQuests.stream;
   Stream<List<Quest>> get inProgressQuests => _inProgressQuests.stream;
   Stream<List<QuestTaker>> get questsUserIsDoing => _questsUserIsDoing.stream;
+  Stream<Quest> get currentQuestOfUser => _currentQuestOfUser.stream;
 
   Function(List<Quest>) get _changeQuests => _quests.sink.add;
   Function(List<Quest>) get _changeAvailableQuests => _availableQuests.sink.add;
   Function(List<Quest>) get _changeInProgressQuests => _inProgressQuests.sink.add;
   Function(List<QuestTaker>) get _changeQuestsUserIsDoing => _questsUserIsDoing.sink.add;
+  Function(Quest) get _changeCurrentQuestOfUser => _currentQuestOfUser.sink.add;
 
   Future<void> fetchQuests() async {
     List<Quest> quests = await _questRepository.quests;
@@ -64,6 +67,11 @@ class QuestBloc {
 
   Future<Quest> fetchQuestById(String questId) async => await _questRepository.fetchQuestById(questId);
 
+  Future<void> fetchCurrentQuestOfUser() async {
+    Quest quest = await _questRepository.currentQuest;
+    _changeCurrentQuestOfUser(quest);
+  }
+
   Future<bool> enrollInQuest(Quest quest) async {
     bool isSucces = await _questRepository.enrollInQuest(quest.questId);
     if (isSucces) fetchQuests();
@@ -76,10 +84,16 @@ class QuestBloc {
     return isSucces;
   }
 
+  void onSignOut() {
+    _changeCurrentQuestOfUser(null);
+    _questRepository.clearQuests();
+  }
+
   void dispose() {
     _quests.close();
     _availableQuests.close();
     _inProgressQuests.close();
     _questsUserIsDoing.close();
+    _currentQuestOfUser.close();
   }
 }

@@ -186,7 +186,7 @@ class _OpportunitiesMapPageState extends State<OpportunitiesMapPage> {
     final _opportunityBloc = Provider.of<OpportunityBloc>(context);
     final _questBloc = Provider.of<QuestBloc>(context);
     final _userLocation = Provider.of<UserLocation>(context);
-    print('Lat: ${_userLocation?.latitude}, Long: ${_userLocation?.longitude}');
+    //print('Lat: ${_userLocation?.latitude}, Long: ${_userLocation?.longitude}');
 
     return Container(
       child: StreamBuilder(

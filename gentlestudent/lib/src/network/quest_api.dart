@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gentlestudent/src/models/quest.dart';
 import 'package:gentlestudent/src/models/quest_taker.dart';
 
@@ -20,6 +21,21 @@ class QuestApi {
         .collection("Quests")
         .document(questId)
         .get());
+  }
+
+  Future<Quest> fetchCurrentQuestOfUser(String userId) async {
+    DateTime yesterday = DateTime.now().subtract(Duration(days: 1));
+
+    List<Quest> quests = (await Firestore.instance
+            .collection('Quests')
+            .where("created", isGreaterThan: Timestamp.fromDate(yesterday))
+            .where("questGiverId", isEqualTo: userId)
+            .getDocuments())
+        .documents
+        .map((snapshot) => Quest.fromDocumentSnapshot(snapshot))
+        .toList();
+
+    return quests == null || quests.isEmpty ? null : quests.first;
   }
 
   Future<List<QuestTaker>> fetchQuestTakersByQuestId(String questId) async {
@@ -73,5 +89,23 @@ class QuestApi {
   Future<void> disenrollInQuest(String questTakerId) async {
     final CollectionReference collection = Firestore.instance.collection("QuestTakers");
     await collection.document(questTakerId).delete().catchError((e) => print(e));
+  }
+
+  Future<void> createQuest(FirebaseUser user, String title, String description, String email, String phone, double latitude, double longitude) async {
+    Map<String, dynamic> data = <String, dynamic>{
+      "created": Timestamp.now(),
+      "description": description,
+      "emailAddress": email,
+      "latitude": latitude,
+      "longitude": longitude,
+      "phoneNumber": phone,
+      "questGiver": user.displayName,
+      "questGiverId": user.uid,
+      "questStatus": 0,
+      "title": title,
+    };
+
+    final CollectionReference collection = Firestore.instance.collection("Quests");
+    collection.add(data).catchError((e) => print(e));
   }
 }
