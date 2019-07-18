@@ -1,11 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gentlestudent/src/models/enums/quest_status.dart';
 import 'package:gentlestudent/src/models/quest.dart';
 import 'package:gentlestudent/src/models/quest_taker.dart';
 import 'package:gentlestudent/src/repositories/quest_repository.dart';
+import 'package:gentlestudent/src/repositories/user_repository.dart';
 import 'package:rxdart/subjects.dart';
 
 class QuestBloc {
   final _questRepository = QuestRepository();
+  final _userRepository = UserRepository();
   final _quests = BehaviorSubject<List<Quest>>();
   final _availableQuests = BehaviorSubject<List<Quest>>();
   final _inProgressQuests = BehaviorSubject<List<Quest>>();
@@ -29,7 +32,13 @@ class QuestBloc {
 
     if (quests != null && quests.isNotEmpty) {
       quests.removeWhere((q) => q.questStatus == QuestStatus.FINISHED);
-       _changeQuests(quests);
+
+      FirebaseUser user = await _userRepository.getUser();
+      if (user != null) {
+        quests.removeWhere((q) => q.questGiverId == user?.uid ?? "");
+      }
+
+      _changeQuests(quests);
 
       List<Quest> filteredQuests = [...quests];
       List<QuestTaker> questTakers = await _questRepository.questTakers ?? [];
