@@ -74,12 +74,13 @@ class QuestApi {
     return questTakers != null && questTakers.isNotEmpty ? questTakers.first : null;
   }
 
-  Future<void> enrollInQuest(String userId, String questId) async {
+  Future<void> enrollInQuest(String userId, String participantName, String questId) async {
     Map<String, dynamic> data = <String, dynamic>{
       "isDoingQuest": false,
       "questId": questId,
       "participantId": userId,
       "participatedOn": Timestamp.now(),
+      "participantName": participantName,
     };
 
     final CollectionReference collection = Firestore.instance.collection("QuestTakers");

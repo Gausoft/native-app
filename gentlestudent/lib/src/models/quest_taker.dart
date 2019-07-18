@@ -4,6 +4,7 @@ class QuestTaker {
   final String questTakerId;
   final String questId;
   final String participantId;
+  final String participantName;
   final bool isDoingQuest;
   final Timestamp participatedOn;
 
@@ -11,6 +12,7 @@ class QuestTaker {
     this.questTakerId,
     this.questId,
     this.participantId,
+    this.participantName,
     this.isDoingQuest,
     this.participatedOn,
   });
@@ -22,6 +24,7 @@ class QuestTaker {
       questTakerId: snapshot.documentID,
       questId: data['questId'],
       participantId: data['participantId'],
+      participantName: data['participantName'],
       isDoingQuest: data['isDoingQuest'],
       participatedOn: data['participatedOn'],
     );

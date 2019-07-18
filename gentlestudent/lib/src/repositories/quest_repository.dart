@@ -80,7 +80,7 @@ class QuestRepository {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     if (user == null) return false;
 
-    await _questApi.enrollInQuest(user.uid, questId);
+    await _questApi.enrollInQuest(user.uid, user.displayName, questId);
     await _fetchQuestTakersByUserId();
     return true;
   }
