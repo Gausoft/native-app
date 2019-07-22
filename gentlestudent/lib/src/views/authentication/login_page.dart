@@ -11,6 +11,13 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   LoginBloc _loginBloc;
+  bool _isObscured = true;
+
+  void _toggleIsObscured() {
+    setState(() {
+      _isObscured = !_isObscured;
+    });
+  }
 
   void _navigateToRegistrationPage() {
     Navigator.push(
@@ -218,13 +225,17 @@ class _LoginPageState extends State<LoginPage> {
         stream: _loginBloc.password,
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           return TextField(
-            obscureText: true,
+            obscureText: _isObscured,
             onChanged: _loginBloc.changePassword,
             decoration: InputDecoration(
               fillColor: Colors.lightBlue,
               labelText: 'Wachtwoord',
               hintText: '**********',
               errorText: snapshot.error,
+              suffixIcon: IconButton(
+                icon: _isObscured ? Icon(Icons.visibility_off) : Icon(Icons.visibility),
+                onPressed: _toggleIsObscured,
+              ),
               contentPadding: EdgeInsets.symmetric(
                 horizontal: 20,
                 vertical: 12,

@@ -10,6 +10,20 @@ class RegistrationPage extends StatefulWidget {
 
 class _RegistrationPageState extends State<RegistrationPage> {
   RegistrationBloc _registrationBloc;
+  bool _isPasswordObscured = true;
+  bool _isRepeatPasswordObscured = true;
+
+  void _toggleIsPasswordObscured() {
+    setState(() {
+      _isPasswordObscured = !_isPasswordObscured;
+    });
+  }
+
+  void _toggleIsRepeatPasswordObscured() {
+    setState(() {
+      _isRepeatPasswordObscured = !_isRepeatPasswordObscured;
+    });
+  }
 
   void _navigateToLoginPage() {
     Navigator.of(context).pop();
@@ -206,13 +220,17 @@ class _RegistrationPageState extends State<RegistrationPage> {
         stream: _registrationBloc.password,
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           return TextField(
-            obscureText: true,
+            obscureText: _isPasswordObscured,
             onChanged: _registrationBloc.changePassword,
             decoration: InputDecoration(
               fillColor: Colors.lightBlue,
               labelText: 'Wachtwoord',
               hintText: '**********',
               errorText: snapshot.error,
+              suffixIcon: IconButton(
+                icon: _isPasswordObscured ? Icon(Icons.visibility_off) : Icon(Icons.visibility),
+                onPressed: _toggleIsPasswordObscured,
+              ),
               contentPadding: EdgeInsets.symmetric(
                 horizontal: 20,
                 vertical: 12,
@@ -229,13 +247,17 @@ class _RegistrationPageState extends State<RegistrationPage> {
         stream: _registrationBloc.repeatPassword,
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           return TextField(
-            obscureText: true,
+            obscureText: _isRepeatPasswordObscured,
             onChanged: _registrationBloc.changeRepeatPassword,
             decoration: InputDecoration(
               fillColor: Colors.lightBlue,
               labelText: 'Herhaal wachtwoord',
               hintText: '**********',
               errorText: snapshot.error,
+              suffixIcon: IconButton(
+                icon: _isRepeatPasswordObscured ? Icon(Icons.visibility_off) : Icon(Icons.visibility),
+                onPressed: _toggleIsRepeatPasswordObscured,
+              ),
               contentPadding: EdgeInsets.symmetric(
                 horizontal: 20,
                 vertical: 12,
