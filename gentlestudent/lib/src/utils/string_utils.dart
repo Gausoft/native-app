@@ -1,5 +1,6 @@
 import 'package:gentlestudent/src/models/enums/category.dart';
 import 'package:gentlestudent/src/models/enums/difficulty.dart';
+import 'package:gentlestudent/src/models/enums/quest_status.dart';
 import 'package:gentlestudent/src/models/enums/status.dart';
 import 'package:gentlestudent/src/models/opportunity.dart';
 import 'package:gentlestudent/src/models/participation.dart';
@@ -92,6 +93,19 @@ class StringUtils {
         return "Voltooid";
     }
     return "Onbekend";
+  }
+
+  static String getQuestStatus(Quest quest) {
+    switch (quest.questStatus) {
+      case QuestStatus.AVAILABLE:
+        return "Beschikbaar";
+      case QuestStatus.INPROGRESS:
+        return "Wordt uitgevoerd";
+      case QuestStatus.FINISHED:
+        return "Afgelopen";
+      default:
+        return "Afgelopen";
+    }
   }
 
   static String getReason(Participation participation) =>

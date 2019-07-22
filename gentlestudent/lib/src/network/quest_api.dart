@@ -145,4 +145,16 @@ class QuestApi {
       }).catchError((e) => print(e));
     }).catchError((e) => print(e));
   }
+
+  Future<void> finishQuest(String questId) async {
+    Map<String, dynamic> questData = <String, dynamic>{
+      "questStatus": 2,
+    };
+
+     await Firestore.instance
+        .collection("Quests")
+        .document(questId)
+        .updateData(questData)
+        .catchError((e) => print(e));
+  }
 }

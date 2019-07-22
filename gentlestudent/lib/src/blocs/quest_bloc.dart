@@ -25,7 +25,7 @@ class QuestBloc {
   Function(List<Quest>) get _changeAvailableQuests => _availableQuests.sink.add;
   Function(List<Quest>) get _changeInProgressQuests => _inProgressQuests.sink.add;
   Function(List<QuestTaker>) get _changeQuestsUserIsDoing => _questsUserIsDoing.sink.add;
-  Function(Quest) get _changeCurrentQuestOfUser => _currentQuestOfUser.sink.add;
+  Function(Quest) get changeCurrentQuestOfUser => _currentQuestOfUser.sink.add;
 
   Future<void> fetchQuests() async {
     List<Quest> quests = await _questRepository.quests;
@@ -46,7 +46,7 @@ class QuestBloc {
       List<String> questsTheUserIsDoing = questTakers.map((qt) => qt.questId).toList();
 
       if (questsTheUserIsDoing == null || questsTheUserIsDoing.isEmpty) {
-        _changeAvailableQuests(filteredQuests);
+        _changeAvailableQuests(filteredQuests.where((q) => q.questStatus == QuestStatus.AVAILABLE).toList());
         _changeInProgressQuests([]);
       } else {
         List<Quest> availableQuests = [];
@@ -78,7 +78,7 @@ class QuestBloc {
 
   Future<void> fetchCurrentQuestOfUser() async {
     Quest quest = await _questRepository.currentQuest;
-    _changeCurrentQuestOfUser(quest);
+    changeCurrentQuestOfUser(quest);
   }
 
   Future<bool> enrollInQuest(Quest quest) async {
@@ -99,11 +99,22 @@ class QuestBloc {
 
     bool isSucces = await _questRepository.appointQuestTakerToQuest(quest, questTaker);
 
+    await fetchCurrentQuestOfUser();
+
+    return isSucces;
+  }
+
+  Future<bool> finishQuest() async {
+    Quest quest = _currentQuestOfUser.value;
+    if (quest == null || quest.questId == null) return false;
+
+    bool isSucces = await _questRepository.finishQuest(quest);
+
     return isSucces;
   }
 
   void onSignOut() {
-    _changeCurrentQuestOfUser(null);
+    changeCurrentQuestOfUser(null);
     _questRepository.clearQuests();
   }
 

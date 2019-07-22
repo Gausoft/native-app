@@ -25,6 +25,7 @@ class ProfilePage extends StatelessWidget {
     final _tokenBloc = Provider.of<TokenBloc>(context);
     double _headerHeight = MediaQuery.of(context).size.height / 3.5;
     double _tokenImageWidth = MediaQuery.of(context).size.width / 4;
+    _tokenBloc.fetchTokens();
 
     return Scaffold(
       appBar: appBar("Profiel"),

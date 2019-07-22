@@ -11,6 +11,8 @@ class QuestRepository {
   Future<List<Quest>> get quests async {
     if (_quests == null || _quests.isEmpty) {
       await _fetchQuests();
+    } else {
+      _fetchQuests();
     }
     return _quests;
   }
@@ -34,7 +36,7 @@ class QuestRepository {
   Future<Quest> fetchQuestById(String questId) async {
     Quest quest;
 
-    if (_quests == null || _quests.isEmpty) {
+    if (_quests != null && _quests.isNotEmpty && _quests.map((q) => q.questId).toList().contains(questId)) {
       quest = _quests.firstWhere((q) => q.questId == questId);
     }
 
@@ -70,11 +72,12 @@ class QuestRepository {
   }
 
   Future<void> _fetchCurrentQuestOfUser() async {
-    _currentQuest = Quest();
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     if (user == null) return;
 
-    _currentQuest = await _questApi.fetchCurrentQuestOfUser(user.uid) ?? Quest();
+    Quest quest = await _questApi.fetchCurrentQuestOfUser(user.uid);
+
+    _currentQuest = quest != null && quest.questStatus != QuestStatus.FINISHED ? quest : Quest();
   }
 
   Future<bool> enrollInQuest(String questId) async {
@@ -106,6 +109,20 @@ class QuestRepository {
     if (user == null || user.uid != quest.questGiverId) return false;
 
     await _questApi.appointQuestTakerToQuest(quest, questTaker);
+
+    _currentQuest.questStatus = QuestStatus.INPROGRESS;
+
+    return true;
+  }
+
+  Future<bool> finishQuest(Quest quest) async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    if (user == null || user.uid != quest.questGiverId) return false;
+
+    await _questApi.finishQuest(quest.questId);
+
+    _currentQuest = null;
+
     return true;
   }
 

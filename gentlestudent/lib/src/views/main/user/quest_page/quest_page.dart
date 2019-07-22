@@ -9,6 +9,7 @@ class QuestPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _questBloc = Provider.of<QuestBloc>(context);
+    _questBloc.fetchQuests();
 
     return DefaultTabController(
       length: 2,

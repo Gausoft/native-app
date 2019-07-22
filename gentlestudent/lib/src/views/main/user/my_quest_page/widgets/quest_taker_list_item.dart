@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gentlestudent/src/blocs/quest_bloc.dart';
+import 'package:gentlestudent/src/models/enums/quest_status.dart';
+import 'package:gentlestudent/src/models/quest.dart';
 import 'package:gentlestudent/src/models/quest_taker.dart';
 import 'package:gentlestudent/src/utils/date_utils.dart';
 import 'package:gentlestudent/src/views/main/user/my_quest_page/widgets/select_quest_taker_dialog.dart';
@@ -8,9 +10,10 @@ import 'package:gentlestudent/src/widgets/generic_dialog.dart';
 import 'package:provider/provider.dart';
 
 class QuestTakerListItem extends StatelessWidget {
+  final Quest quest;
   final QuestTaker questTaker;
 
-  QuestTakerListItem(this.questTaker);
+  QuestTakerListItem(this.quest, this.questTaker);
 
   Future<void> appointQuestTakerToQuest(
       QuestBloc bloc, BuildContext context) async {
@@ -41,7 +44,9 @@ class QuestTakerListItem extends StatelessWidget {
       elevation: 4,
       child: InkWell(
         borderRadius: BorderRadius.circular(8),
-        onTap: () => appointQuestTakerToQuest(_questBloc, context),
+        onTap: () => quest.questStatus == QuestStatus.AVAILABLE
+            ? appointQuestTakerToQuest(_questBloc, context)
+            : {},
         child: Row(
           children: <Widget>[
             questLogo(_imageWidth,

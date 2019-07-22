@@ -9,6 +9,8 @@ class TokenRepository {
   Future<List<Token>> get tokens async {
     if (_tokens == null || _tokens.isEmpty) {
       await _fetchTokens();
+    } else {
+      _fetchTokens();
     }
     return _tokens;
   }
@@ -18,6 +20,11 @@ class TokenRepository {
     if (user != null) {
       _tokens = await _tokenApi.fetchTokensOfUser(user.uid);
     }
+  }
+
+  Future<bool> createToken(String userId, String questId) async {
+    bool isSucces = await _tokenApi.createToken(userId, questId);
+    return isSucces;
   }
 
   void clearTokens() => _tokens = [];

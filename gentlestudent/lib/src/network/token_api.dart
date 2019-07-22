@@ -11,4 +11,19 @@ class TokenApi {
         .map((snapshot) => Token.fromDocumentSnapshot(snapshot))
         .toList();
   }
+
+  Future<bool> createToken(String userId, String questId) async {
+    Map<String, dynamic> data = <String, dynamic>{
+      "imageUrl": "",
+      "issuedOn": Timestamp.now(),
+      "participantId": userId,
+      "questId": questId,
+    };
+
+    final CollectionReference collection =
+        Firestore.instance.collection("Tokens");
+    collection.add(data).catchError((e) => print(e));
+
+    return true;
+  }
 }
