@@ -12,6 +12,8 @@ import 'package:gentlestudent/src/views/authentication/widgets/app_bar.dart';
 import 'package:gentlestudent/src/views/main/user/settings_page/widgets/change_profile_picture_dialog.dart';
 // import 'package:gentlestudent/src/views/main/user/settings_page/widgets/location_permission_dialog.dart';
 import 'package:gentlestudent/src/views/main/user/settings_page/widgets/sign_out_dialog.dart';
+import 'package:gentlestudent/src/widgets/generic_dialog.dart';
+import 'package:gentlestudent/src/widgets/loading_spinner.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -40,8 +42,16 @@ class _SettingsPageState extends State<SettingsPage> {
     ImageSource source = await showChangeProfilePictureDialog(context, bloc);
     if (source != null) {
       final image = await ImagePicker.pickImage(source: source);
-      final isSucces = await bloc.changeProfilePicture(image);
-      print(isSucces);
+      if (image != null) {
+        final isSucces = await bloc.changeProfilePicture(image);
+        genericDialog(
+          context,
+          "Profielfoto wijzigen",
+          isSucces
+              ? "Je profielfoto werd succesvol gewijzigd! Deze is nu zichtbaar op je profielpagina."
+              : "Er ging iets mis tijdens het wijzigen van je profielfoto. Gelieve het opnieuw te proberen.",
+        );
+      }
     }
   }
 
@@ -67,9 +77,10 @@ class _SettingsPageState extends State<SettingsPage> {
       appBar: appBar("Instellingen"),
       body: Column(
         children: <Widget>[
-          settingsListTile(
+          changeProfilePictureListTile(
             "Wijzig profielfoto",
             () => _changeProfilePicture(context, _participantBloc),
+            _participantBloc,
           ),
           settingsListTile(
             "Donkere modus",
@@ -121,5 +132,44 @@ class _SettingsPageState extends State<SettingsPage> {
           title: Text(title),
           onTap: !isSwitch ? onPressed : () => onPressed(false),
         ),
+      );
+
+  Widget changeProfilePictureListTile(
+    String title,
+    Function onPressed,
+    ParticipantBloc bloc,
+  ) =>
+      StreamBuilder(
+        stream: bloc.isLoading,
+        initialData: false,
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          return Container(
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.black38
+                      : primaryTextColor,
+                ),
+              ),
+            ),
+            child: ListTile(
+              enabled: !snapshot.data,
+              trailing: snapshot.data
+                  ? Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 4),
+                    child: CircularProgressIndicator(
+                      strokeWidth: 3,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Colors.lightBlue,
+                      ),
+                    ),
+                  )
+                  : Icon(Icons.arrow_forward_ios),
+              title: Text(title),
+              onTap: onPressed,
+            ),
+          );
+        },
       );
 }

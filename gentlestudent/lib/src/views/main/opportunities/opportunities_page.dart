@@ -28,14 +28,13 @@ class OpportunitiesPage extends StatelessWidget {
   ];
 
   void _navigateToOpportunityFilterPage(BuildContext context) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (BuildContext context) =>
-              OpportunityFilterPage(),
-        ),
-      );
-    }
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => OpportunityFilterPage(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,22 +47,19 @@ class OpportunitiesPage extends StatelessWidget {
         int index = snapshot.hasData ? snapshot.data : 0;
 
         return Scaffold(
-          appBar: opportunitiesAppBar(index, _opportunitiesNavigationBloc),
+          appBar:
+              opportunitiesAppBar(context, index, _opportunitiesNavigationBloc),
           body: _pages[index],
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: Colors.lightBlue,
-            child: Icon(
-              FontAwesomeIcons.filter,
-              color: Colors.white,
-            ),
-            onPressed: () => _navigateToOpportunityFilterPage(context),
-          ),
         );
       },
     );
   }
 
-  Widget opportunitiesAppBar(int index, OpportunityNavigationBloc bloc) =>
+  Widget opportunitiesAppBar(
+    BuildContext context,
+    int index,
+    OpportunityNavigationBloc bloc,
+  ) =>
       AppBar(
         centerTitle: true,
         title: Text(
@@ -76,6 +72,15 @@ class OpportunitiesPage extends StatelessWidget {
             icon: Icon(_icons[index]),
             onPressed: () => bloc.changeCurrentIndex(index == 0 ? 1 : 0),
             tooltip: _tooltips[index],
+          ),
+          IconButton(
+            icon: Icon(
+              FontAwesomeIcons.filter,
+              size: 18,
+              color: Colors.white,
+            ),
+            onPressed: () => _navigateToOpportunityFilterPage(context),
+            tooltip: "Toon de leerkansen filter",
           ),
         ],
       );

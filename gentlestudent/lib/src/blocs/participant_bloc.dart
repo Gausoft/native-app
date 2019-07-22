@@ -8,8 +8,10 @@ import 'package:rxdart/rxdart.dart';
 class ParticipantBloc {
   final _participantRepository = ParticipantRepository();
   final _participant = BehaviorSubject<Participant>();
+  final _isLoading = BehaviorSubject<bool>();
 
   Stream<Participant> get participant => _participant.stream;
+  Stream<bool> get isLoading => _isLoading.stream;
 
   Function(Participant) get _changeParticipant => _participant.sink.add;
 
@@ -24,8 +26,10 @@ class ParticipantBloc {
   }
 
   Future<bool> changeProfilePicture(File image) async {
+      _isLoading.sink.add(true);
       final isSucces = await _participantRepository.changeProfilePicture(image);
       _changeParticipant(_participant.value);
+      _isLoading.sink.add(false);
       return isSucces;
   }
 
@@ -35,5 +39,6 @@ class ParticipantBloc {
 
   void dispose() {
     _participant.close();
+    _isLoading.close();
   }
 }

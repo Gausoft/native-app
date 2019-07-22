@@ -133,16 +133,17 @@ class ProfilePage extends StatelessWidget {
                 width: headerHeight / 1.35,
                 height: headerHeight / 1.35,
                 decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(
-                      participant.profilePicture,
-                    ),
-                  ),
                   borderRadius: BorderRadius.circular(360),
                   border: Border.all(
                     color: Colors.white,
                     width: 3,
+                  ),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(360),
+                  child: Image.network(
+                    participant.profilePicture,
+                    fit: BoxFit.cover,
                   ),
                 ),
               )

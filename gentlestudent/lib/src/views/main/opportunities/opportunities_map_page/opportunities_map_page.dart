@@ -28,6 +28,7 @@ class _OpportunitiesMapPageState extends State<OpportunitiesMapPage> {
   static List<String> notifiedOpportunities = [];
   FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
   OpportunityBloc opportunityBloc;
+  final MapController _mapController = MapController();
 
   Future<List<Marker>> generateOpportunityMarkers(
     List<Opportunity> opportunities,
@@ -186,7 +187,9 @@ class _OpportunitiesMapPageState extends State<OpportunitiesMapPage> {
     final _opportunityBloc = Provider.of<OpportunityBloc>(context);
     final _questBloc = Provider.of<QuestBloc>(context);
     final _userLocation = Provider.of<UserLocation>(context);
-    //print('Lat: ${_userLocation?.latitude}, Long: ${_userLocation?.longitude}');
+    final fabRight = MediaQuery.of(context).size.width / 20;
+    final fabHeight = MediaQuery.of(context).size.width / 7;
+    print('Lat: ${_userLocation?.latitude}, Long: ${_userLocation?.longitude}');
 
     return Container(
       child: StreamBuilder(
@@ -222,40 +225,76 @@ class _OpportunitiesMapPageState extends State<OpportunitiesMapPage> {
                         future: generateQuestMarkers(questsSnapshot.data),
                         builder: (BuildContext context,
                             AsyncSnapshot<List<Marker>> questMarkersSnapshot) {
-                          return FlutterMap(
-                            options: MapOptions(
-                              center: LatLng(51.052233, 3.723653),
-                              zoom: 14,
-                              maxZoom: 16,
-                              minZoom: 12,
-                            ),
-                            layers: [
-                              TileLayerOptions(
-                                urlTemplate: "https://api.tiles.mapbox.com/v4/"
-                                    "{id}/{z}/{x}/{y}@2x.png?access_token={accessToken}",
-                                additionalOptions: {
-                                  'accessToken':
-                                      'pk.eyJ1IjoiZ2VudGxlc3R1ZGVudCIsImEiOiJjampxdGI5cGExMjh2M3FudTVkYnl3aDlzIn0.Z3OSj_o97M8_7L8P5s3xIA',
-                                  'id': Theme.of(context).brightness ==
-                                          Brightness.dark
-                                      ? 'mapbox.dark'
-                                      : 'mapbox.streets',
-                                },
+                          return Stack(
+                            children: <Widget>[
+                              FlutterMap(
+                                mapController: _mapController,
+                                options: MapOptions(
+                                  center: _userLocation != null &&
+                                          _userLocation.latitude != null &&
+                                          _userLocation.longitude != null
+                                      ? LatLng(_userLocation.latitude,
+                                          _userLocation.longitude)
+                                      : LatLng(51.052233, 3.723653),
+                                  zoom: 14,
+                                  maxZoom: 16,
+                                  minZoom: 12,
+                                ),
+                                layers: [
+                                  TileLayerOptions(
+                                    urlTemplate:
+                                        "https://api.tiles.mapbox.com/v4/"
+                                        "{id}/{z}/{x}/{y}@2x.png?access_token={accessToken}",
+                                    additionalOptions: {
+                                      'accessToken':
+                                          'pk.eyJ1IjoiZ2VudGxlc3R1ZGVudCIsImEiOiJjampxdGI5cGExMjh2M3FudTVkYnl3aDlzIn0.Z3OSj_o97M8_7L8P5s3xIA',
+                                      'id': Theme.of(context).brightness ==
+                                              Brightness.dark
+                                          ? 'mapbox.dark'
+                                          : 'mapbox.streets',
+                                    },
+                                  ),
+                                  showQuestsFilterSnapshot.hasData &&
+                                          showQuestsFilterSnapshot.data &&
+                                          questMarkersSnapshot.hasData &&
+                                          questMarkersSnapshot.data.isNotEmpty
+                                      ? MarkerLayerOptions(
+                                          markers: questMarkersSnapshot.data)
+                                      : MarkerLayerOptions(),
+                                  MarkerLayerOptions(
+                                      markers: opportunityMarkersSnapshot.data),
+                                  _userLocation != null &&
+                                          _userLocation.latitude != null &&
+                                          _userLocation.longitude != null
+                                      ? userLocationMarker(_userLocation)
+                                      : MarkerLayerOptions(),
+                                ],
                               ),
-                              showQuestsFilterSnapshot.hasData &&
-                                      showQuestsFilterSnapshot.data &&
-                                      questMarkersSnapshot.hasData &&
-                                      questMarkersSnapshot.data.isNotEmpty
-                                  ? MarkerLayerOptions(
-                                      markers: questMarkersSnapshot.data)
-                                  : MarkerLayerOptions(),
-                              MarkerLayerOptions(
-                                  markers: opportunityMarkersSnapshot.data),
-                              _userLocation != null &&
-                                      _userLocation.latitude != null &&
-                                      _userLocation.longitude != null
-                                  ? userLocationMarker(_userLocation)
-                                  : MarkerLayerOptions(),
+                              Positioned(
+                                bottom: fabRight,
+                                right: fabRight,
+                                child: Container(
+                                  width: fabHeight,
+                                  height: fabHeight,
+                                  child: FittedBox(
+                                    child: FloatingActionButton(
+                                      onPressed: () => _mapController.move(
+                                          _userLocation != null &&
+                                                  _userLocation.latitude !=
+                                                      null &&
+                                                  _userLocation.longitude !=
+                                                      null
+                                              ? LatLng(_userLocation.latitude,
+                                                  _userLocation.longitude)
+                                              : LatLng(51.052233, 3.723653),
+                                          14),
+                                      backgroundColor: Colors.lightBlue,
+                                      child: Icon(Icons.my_location,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ],
                           );
                         },
