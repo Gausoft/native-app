@@ -230,12 +230,7 @@ class _OpportunitiesMapPageState extends State<OpportunitiesMapPage> {
                               FlutterMap(
                                 mapController: _mapController,
                                 options: MapOptions(
-                                  center: _userLocation != null &&
-                                          _userLocation.latitude != null &&
-                                          _userLocation.longitude != null
-                                      ? LatLng(_userLocation.latitude,
-                                          _userLocation.longitude)
-                                      : LatLng(51.052233, 3.723653),
+                                  center: LatLng(51.052233, 3.723653),
                                   zoom: 14,
                                   maxZoom: 16,
                                   minZoom: 12,
