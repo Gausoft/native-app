@@ -182,8 +182,8 @@ class MyQuestPage extends StatelessWidget {
           }
 
           if (quest.questStatus == QuestStatus.INPROGRESS) {
-            QuestTaker questTaker =
-                snapshot.data?.firstWhere((qt) => qt.isDoingQuest == true) ?? QuestTaker();
+            QuestTaker questTaker = snapshot.data.where((qt) => qt.isDoingQuest == true).toList().isNotEmpty ?
+                snapshot.data.firstWhere((qt) => qt.isDoingQuest == true) : QuestTaker();
 
             return Container(
               padding: EdgeInsets.symmetric(horizontal: 22, vertical: 8),

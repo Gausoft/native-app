@@ -89,7 +89,7 @@ class QuestBloc {
 
   Future<bool> disenrollInQuest(QuestTaker questTaker) async {
     bool isSucces = await _questRepository.disenrollInQuest(questTaker.questTakerId);
-    if (isSucces) fetchQuests();
+    fetchQuests();
     return isSucces;
   }
 

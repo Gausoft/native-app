@@ -71,7 +71,7 @@ class QuestTakerListItem extends StatelessWidget {
   }
 
   Widget questTakerName(BuildContext context) => Text(
-        questTaker.participantName,
+        questTaker?.participantName ?? "",
         style: TextStyle(
           fontWeight: FontWeight.bold,
           color: Theme.of(context).brightness == Brightness.dark
@@ -85,7 +85,9 @@ class QuestTakerListItem extends StatelessWidget {
       );
 
   Widget questTakerParticipationDate() => Text(
-        "Ingeschreven op ${DateUtils.formatDate(questTaker.participatedOn.toDate())}\nom ${DateUtils.formatTime(questTaker.participatedOn.toDate())}",
+        questTaker != null && questTaker.participatedOn != null
+            ? "Ingeschreven op ${DateUtils.formatDate(questTaker.participatedOn.toDate())}\nom ${DateUtils.formatTime(questTaker.participatedOn.toDate())}"
+            : "Ingeschreven op",
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
         textAlign: TextAlign.start,

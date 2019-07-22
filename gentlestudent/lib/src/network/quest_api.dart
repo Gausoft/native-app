@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gentlestudent/src/models/enums/quest_status.dart';
 import 'package:gentlestudent/src/models/quest.dart';
 import 'package:gentlestudent/src/models/quest_taker.dart';
 
@@ -33,7 +34,13 @@ class QuestApi {
         .map((snapshot) => Quest.fromDocumentSnapshot(snapshot))
         .toList();
 
-    return quests == null || quests.isEmpty ? null : quests.first;
+    Quest quest;
+
+    if (quests.where((q) => q.questStatus != QuestStatus.FINISHED).toList().length > 0) {
+      quest = quests.firstWhere((q) => q.questStatus != QuestStatus.FINISHED);
+    }
+
+    return quests == null || quests.isEmpty ? null : quest;
   }
 
   Future<List<QuestTaker>> fetchQuestTakersByQuestId(String questId) async {
@@ -91,13 +98,26 @@ class QuestApi {
     collection.add(data).catchError((e) => print(e));
   }
 
-  Future<void> disenrollInQuest(String questTakerId) async {
-    final CollectionReference collection =
-        Firestore.instance.collection("QuestTakers");
-    await collection
+  Future<bool> disenrollInQuest(String questTakerId) async {
+    QuestTaker questTaker = QuestTaker.fromDocumentSnapshot(await Firestore
+        .instance
+        .collection("QuestTakers")
         .document(questTakerId)
-        .delete()
-        .catchError((e) => print(e));
+        .get());
+
+    if (questTaker.isDoingQuest) {
+      return false;
+    }
+
+    try {
+      final CollectionReference collection =
+          Firestore.instance.collection("QuestTakers");
+      await collection.document(questTakerId).delete();
+    } catch (error) {
+      return false;
+    }
+
+    return true;
   }
 
   Future<void> createQuest(FirebaseUser user, String title, String description,
@@ -120,7 +140,7 @@ class QuestApi {
     collection.add(data).catchError((e) => print(e));
   }
 
-  Future<void> appointQuestTakerToQuest(
+  Future<bool> appointQuestTakerToQuest(
       Quest quest, QuestTaker questTaker) async {
     Map<String, dynamic> questData = <String, dynamic>{
       "questStatus": 1,
@@ -130,20 +150,30 @@ class QuestApi {
       "isDoingQuest": true,
     };
 
-    await Firestore.instance
-        .collection("Quests")
-        .document(quest.questId)
-        .updateData(questData)
-        .whenComplete(() async {
+    try {
       await Firestore.instance
           .collection("QuestTakers")
           .document(questTaker.questTakerId)
-          .updateData(questTakerData)
-          .whenComplete(() {
-        print(
-            "${questTaker.participantName} was selected to do quest with id ${quest.questId}");
-      }).catchError((e) => print(e));
-    }).catchError((e) => print(e));
+          .updateData(questTakerData);
+    } catch (error) {
+      return false;
+    }
+
+    try {
+      await Firestore.instance
+          .collection("Quests")
+          .document(quest.questId)
+          .updateData(questData)
+          .whenComplete(() {});
+    } catch (error) {
+      return false;
+    }
+
+    print(
+      "${questTaker.participantName} was selected to do quest with id ${quest.questId}",
+    );
+
+    return true;
   }
 
   Future<void> finishQuest(String questId) async {
@@ -151,7 +181,7 @@ class QuestApi {
       "questStatus": 2,
     };
 
-     await Firestore.instance
+    await Firestore.instance
         .collection("Quests")
         .document(questId)
         .updateData(questData)

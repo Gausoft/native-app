@@ -19,9 +19,7 @@ class QuestRepository {
 
   List<QuestTaker> _questTakers;
   Future<List<QuestTaker>> get questTakers async {
-    if (_questTakers == null || _questTakers.isEmpty) {
-      await _fetchQuestTakersByUserId();
-    }
+    await _fetchQuestTakersByUserId();
     return _questTakers;
   }
 
@@ -90,14 +88,14 @@ class QuestRepository {
   }
 
   Future<bool> disenrollInQuest(String questTakerId) async {
-    await _questApi.disenrollInQuest(questTakerId);
+    bool isSucces = await _questApi.disenrollInQuest(questTakerId);
     await _fetchQuestTakersByUserId();
-    return true;
+    return isSucces;
   }
 
   Future<bool> createQuest(String title, String description, String email, String phone, double latitude, double longitude) async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    if (user == null || (_currentQuest != null && _currentQuest.questId!= null)) return false;
+    if (user == null || (_currentQuest != null && _currentQuest.questId != null)) return false;
 
     await _questApi.createQuest(user, title, description, email, phone, latitude, longitude);
     await _fetchCurrentQuestOfUser();
@@ -108,11 +106,13 @@ class QuestRepository {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     if (user == null || user.uid != quest.questGiverId) return false;
 
-    await _questApi.appointQuestTakerToQuest(quest, questTaker);
+    bool isSucces = await _questApi.appointQuestTakerToQuest(quest, questTaker);
 
-    _currentQuest.questStatus = QuestStatus.INPROGRESS;
-
-    return true;
+    if (isSucces) {
+      _currentQuest.questStatus = QuestStatus.INPROGRESS;
+    }
+    
+    return isSucces;
   }
 
   Future<bool> finishQuest(Quest quest) async {
