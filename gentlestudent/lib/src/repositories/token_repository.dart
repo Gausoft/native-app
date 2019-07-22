@@ -1,4 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gentlestudent/src/models/quest.dart';
+import 'package:gentlestudent/src/models/quest_taker.dart';
 import 'package:gentlestudent/src/models/token.dart';
 import 'package:gentlestudent/src/network/token_api.dart';
 
@@ -22,8 +24,8 @@ class TokenRepository {
     }
   }
 
-  Future<bool> createToken(String userId, String questId) async {
-    bool isSucces = await _tokenApi.createToken(userId, questId);
+  Future<bool> createToken(QuestTaker questTaker, Quest quest) async {
+    bool isSucces = await _tokenApi.createToken(questTaker, quest);
     return isSucces;
   }
 

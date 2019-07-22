@@ -13,7 +13,6 @@ import 'package:gentlestudent/src/views/main/user/settings_page/widgets/change_p
 // import 'package:gentlestudent/src/views/main/user/settings_page/widgets/location_permission_dialog.dart';
 import 'package:gentlestudent/src/views/main/user/settings_page/widgets/sign_out_dialog.dart';
 import 'package:gentlestudent/src/widgets/generic_dialog.dart';
-import 'package:gentlestudent/src/widgets/loading_spinner.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -30,9 +29,10 @@ class _SettingsPageState extends State<SettingsPage> {
     });
 
     DynamicTheme.of(context).setBrightness(
-        Theme.of(context).brightness == Brightness.dark
-            ? Brightness.light
-            : Brightness.dark);
+      Theme.of(context).brightness == Brightness.dark
+          ? Brightness.light
+          : Brightness.dark,
+    );
   }
 
   Future<void> _changeProfilePicture(
@@ -157,14 +157,14 @@ class _SettingsPageState extends State<SettingsPage> {
               enabled: !snapshot.data,
               trailing: snapshot.data
                   ? Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 4),
-                    child: CircularProgressIndicator(
-                      strokeWidth: 3,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        Colors.lightBlue,
+                      padding: EdgeInsets.symmetric(horizontal: 4),
+                      child: CircularProgressIndicator(
+                        strokeWidth: 3,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Colors.lightBlue,
+                        ),
                       ),
-                    ),
-                  )
+                    )
                   : Icon(Icons.arrow_forward_ios),
               title: Text(title),
               onTap: onPressed,

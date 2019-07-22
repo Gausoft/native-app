@@ -25,8 +25,13 @@ class MyQuestPage extends StatelessWidget {
     );
   }
 
-  Future<void> _finishQuest(QuestBloc questBloc, TokenBloc tokenBloc,
-      QuestTaker questTaker, BuildContext context) async {
+  Future<void> _finishQuest(
+    QuestBloc questBloc,
+    TokenBloc tokenBloc,
+    QuestTaker questTaker,
+    Quest quest,
+    BuildContext context,
+  ) async {
     bool isCompleted = await showIsQuestCompletedDialog(context);
 
     if (isCompleted == null || !isCompleted) return;
@@ -34,7 +39,7 @@ class MyQuestPage extends StatelessWidget {
     bool isSucces = await questBloc.finishQuest();
 
     if (isSucces) {
-      bool didCreateToken = await tokenBloc.createToken(questTaker);
+      bool didCreateToken = await tokenBloc.createToken(questTaker, quest);
       didCreateToken
           ? await genericDialog(context, "Quest voltooien",
               "De quest is voltooid en ${questTaker.participantName} heeft een token gekregen!")
@@ -182,8 +187,12 @@ class MyQuestPage extends StatelessWidget {
           }
 
           if (quest.questStatus == QuestStatus.INPROGRESS) {
-            QuestTaker questTaker = snapshot.data.where((qt) => qt.isDoingQuest == true).toList().isNotEmpty ?
-                snapshot.data.firstWhere((qt) => qt.isDoingQuest == true) : QuestTaker();
+            QuestTaker questTaker = snapshot.data
+                    .where((qt) => qt.isDoingQuest == true)
+                    .toList()
+                    .isNotEmpty
+                ? snapshot.data.firstWhere((qt) => qt.isDoingQuest == true)
+                : QuestTaker();
 
             return Container(
               padding: EdgeInsets.symmetric(horizontal: 22, vertical: 8),
@@ -196,8 +205,13 @@ class MyQuestPage extends StatelessWidget {
                   SizedBox(height: 8),
                   giveTokenButton(
                     "Voltooi quest",
-                    () =>
-                        _finishQuest(questBloc, tokenBloc, questTaker, context,),
+                    () => _finishQuest(
+                      questBloc,
+                      tokenBloc,
+                      questTaker,
+                      quest,
+                      context,
+                    ),
                   ),
                   SizedBox(height: 8),
                 ],

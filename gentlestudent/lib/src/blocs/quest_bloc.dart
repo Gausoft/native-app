@@ -82,7 +82,7 @@ class QuestBloc {
   }
 
   Future<bool> enrollInQuest(Quest quest) async {
-    bool isSucces = await _questRepository.enrollInQuest(quest.questId);
+    bool isSucces = await _questRepository.enrollInQuest(quest);
     if (isSucces) fetchQuests();
     return isSucces;
   }

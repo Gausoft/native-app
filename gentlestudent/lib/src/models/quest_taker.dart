@@ -5,6 +5,7 @@ class QuestTaker {
   final String questId;
   final String participantId;
   final String participantName;
+  final String participantEmail;
   final bool isDoingQuest;
   final Timestamp participatedOn;
 
@@ -13,6 +14,7 @@ class QuestTaker {
     this.questId,
     this.participantId,
     this.participantName,
+    this.participantEmail,
     this.isDoingQuest,
     this.participatedOn,
   });
@@ -25,6 +27,7 @@ class QuestTaker {
       questId: data['questId'],
       participantId: data['participantId'],
       participantName: data['participantName'],
+      participantEmail: data['participantEmail'],
       isDoingQuest: data['isDoingQuest'],
       participatedOn: data['participatedOn'],
     );

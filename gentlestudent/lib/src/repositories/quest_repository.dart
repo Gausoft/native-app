@@ -78,11 +78,11 @@ class QuestRepository {
     _currentQuest = quest != null && quest.questStatus != QuestStatus.FINISHED ? quest : Quest();
   }
 
-  Future<bool> enrollInQuest(String questId) async {
+  Future<bool> enrollInQuest(Quest quest) async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     if (user == null) return false;
 
-    await _questApi.enrollInQuest(user.uid, user.displayName, questId);
+    await _questApi.enrollInQuest(user, quest);
     await _fetchQuestTakersByUserId();
     return true;
   }

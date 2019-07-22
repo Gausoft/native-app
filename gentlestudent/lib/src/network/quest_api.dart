@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gentlestudent/src/models/enums/quest_status.dart';
 import 'package:gentlestudent/src/models/quest.dart';
@@ -36,7 +37,11 @@ class QuestApi {
 
     Quest quest;
 
-    if (quests.where((q) => q.questStatus != QuestStatus.FINISHED).toList().length > 0) {
+    if (quests
+            .where((q) => q.questStatus != QuestStatus.FINISHED)
+            .toList()
+            .length >
+        0) {
       quest = quests.firstWhere((q) => q.questStatus != QuestStatus.FINISHED);
     }
 
@@ -83,19 +88,31 @@ class QuestApi {
         : null;
   }
 
-  Future<void> enrollInQuest(
-      String userId, String participantName, String questId) async {
+  Future<void> enrollInQuest(FirebaseUser user, Quest quest) async {
     Map<String, dynamic> data = <String, dynamic>{
       "isDoingQuest": false,
-      "questId": questId,
-      "participantId": userId,
+      "questId": quest.questId,
+      "participantId": user.uid,
       "participatedOn": Timestamp.now(),
-      "participantName": participantName,
+      "participantName": user.displayName,
+      "participantEmail": user.email,
     };
 
     final CollectionReference collection =
         Firestore.instance.collection("QuestTakers");
-    collection.add(data).catchError((e) => print(e));
+    collection.add(data).whenComplete(() async {
+      final HttpsCallable callable = CloudFunctions.instance.getHttpsCallable(
+        functionName: 'notifyQuestGiver',
+      );
+      await callable.call(<String, dynamic>{
+        "takerName": user.displayName,
+        "giverEmail": quest.emailAddress,
+        "questTitle": quest.title,
+        "giverName": quest.questGiver,
+        "questId": quest.questId,
+      });
+      print("E-mail sent");
+    }).catchError((e) => print(e));
   }
 
   Future<bool> disenrollInQuest(String questTakerId) async {
@@ -168,6 +185,19 @@ class QuestApi {
     } catch (error) {
       return false;
     }
+
+    final HttpsCallable callable = CloudFunctions.instance.getHttpsCallable(
+      functionName: 'notifyQuestTaker',
+    );
+    await callable.call(<String, dynamic>{
+      "giverName": quest.questGiver,
+      "giverEmail": quest.emailAddress,
+      "takerName": questTaker.participantName,
+      "takerEmail": questTaker.participantEmail,
+      "questTitle": quest.title,
+      "questId": quest.questId,
+    });
+    print("E-mail sent");
 
     print(
       "${questTaker.participantName} was selected to do quest with id ${quest.questId}",
