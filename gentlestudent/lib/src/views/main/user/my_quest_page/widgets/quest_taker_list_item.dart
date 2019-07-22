@@ -4,8 +4,8 @@ import 'package:gentlestudent/src/models/enums/quest_status.dart';
 import 'package:gentlestudent/src/models/quest.dart';
 import 'package:gentlestudent/src/models/quest_taker.dart';
 import 'package:gentlestudent/src/utils/date_utils.dart';
+import 'package:gentlestudent/src/utils/quest_utils.dart';
 import 'package:gentlestudent/src/views/main/user/my_quest_page/widgets/select_quest_taker_dialog.dart';
-import 'package:gentlestudent/src/views/main/user/quest_page/widgets/quest_logo.dart';
 import 'package:gentlestudent/src/widgets/generic_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -49,8 +49,7 @@ class QuestTakerListItem extends StatelessWidget {
             : {},
         child: Row(
           children: <Widget>[
-            questLogo(_imageWidth,
-                "https://cdn1.iconfinder.com/data/icons/gaming-3-1/128/102-512.png"),
+            questLogo(_imageWidth),
             Expanded(
               child: Padding(
                 padding: EdgeInsets.all(12),
@@ -69,6 +68,15 @@ class QuestTakerListItem extends StatelessWidget {
       ),
     );
   }
+
+  Widget questLogo(double imageWidth) => Padding(
+      padding: EdgeInsets.fromLTRB(12, 8, 4, 8),
+      child: SizedBox(
+        width: imageWidth,
+        height: imageWidth,
+        child: QuestUtils.chooseQuestTakerLogo(questTaker?.participantName ?? ""),
+      ),
+    );
 
   Widget questTakerName(BuildContext context) => Text(
         questTaker?.participantName ?? "",

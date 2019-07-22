@@ -83,6 +83,12 @@ flutter:
   - assets/images/tutorial/bluetooth.png
   - assets/images/tutorial/challenge.png
 
+  - assets/quests/icons/qt_icon_arrow.png
+  - assets/quests/icons/qt_icon_helmet.png
+  - assets/quests/icons/qt_icon_shield.png
+  - assets/quests/icons/qt_icon_sword.png
+  - assets/quests/icons/qt_icon_wizard.png
+
   fonts:
     - family: NeoSansPro
       fonts:
