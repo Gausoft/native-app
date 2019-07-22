@@ -33,7 +33,14 @@ class RegistrationBloc with RegistrationValidators {
         email,
         password,
         repeatPassword,
-        (f, l, ed, em, p, rp) => p == rp,
+        (f, l, ed, em, p, rp) =>
+            f == _firstName.value &&
+            l == _lastName.value &&
+            ed == _education.value &&
+            em == _email.value &&
+            p == _password.value &&
+            rp == _repeatPassword.value &&
+            0 == p.compareTo(rp),
       );
 
   Function(String) get changeFirstName => _firstName.sink.add;

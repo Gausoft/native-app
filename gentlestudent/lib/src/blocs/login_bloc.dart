@@ -17,7 +17,7 @@ class LoginBloc with LoginValidators {
   Stream<bool> get isSubmitValid => Observable.combineLatest2(
         email,
         password,
-        (e, p) => true,
+        (e, p) => e == _email.value && p == _password.value,
       );
 
   Function(String) get changeEmail => _email.sink.add;

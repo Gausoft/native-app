@@ -277,7 +277,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                   TextStyle(color: Colors.white, fontSize: 16),
                             ),
                       color: Colors.lightBlueAccent,
-                      onPressed: snapshotValid.hasData
+                      onPressed: snapshotValid.hasData && snapshotValid.data
                           ? () => _onRegistrationButtonClick(context)
                           : null,
                       padding: EdgeInsets.symmetric(vertical: 18),

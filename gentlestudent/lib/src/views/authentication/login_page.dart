@@ -266,7 +266,7 @@ class _LoginPageState extends State<LoginPage> {
                                   TextStyle(color: Colors.white, fontSize: 16),
                             ),
                       color: Colors.lightBlueAccent,
-                      onPressed: snapshotValid.hasData
+                      onPressed: snapshotValid.hasData && snapshotValid.data
                           ? () => _onLoginButtonClick()
                           : null,
                       padding: EdgeInsets.symmetric(vertical: 18),
