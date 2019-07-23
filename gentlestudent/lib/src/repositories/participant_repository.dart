@@ -40,7 +40,6 @@ class ParticipantRepository {
 
   Future<bool> changeProfilePicture(File image) async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
-
     if (_participant == null || user == null) return false;
 
     try {
@@ -59,6 +58,17 @@ class ParticipantRepository {
       print("An error occurred while changing the profile picture: $error");
       return false;
     }
+  }
+
+  Future<bool> editParticipantProfile(String name, String institute, String email) async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    if (user == null) return false;
+
+    final isSucces = await _participantApi.editParticipantProfile(user.uid, name, institute, email);
+
+    if (isSucces) await _fetchParticipant();
+
+    return isSucces;
   }
 
   void clearParticipant() => _participant = null;

@@ -62,11 +62,40 @@ class UserRepository {
 
   Future<FirebaseUser> getUser() async => await _firebaseAuth.currentUser();
 
-  Future forgotPassword(String email) async {
+  Future<void> forgotPassword(String email) async {
     try {
       await _firebaseAuth.sendPasswordResetEmail(email: email);
     } catch(error) {
       print("An error occurred while sending the password reset email: $error");
     }
+  }
+
+  Future<bool> editFirebaseUser(String name, String email) async {
+    FirebaseUser user = await getUser();
+    if (user == null) return false;
+
+    if (email != user.email) {
+      try {
+        await user.updateEmail(email);
+        await user.sendEmailVerification();
+      } catch (error) {
+        print("Error changing email: $error");
+        return false;
+      }
+    }
+
+    if (name != user.displayName) {
+      UserUpdateInfo info = UserUpdateInfo()
+        ..displayName = name;
+
+      try {
+        await user.updateProfile(info);
+      } catch (error) {
+        print("Error changing name and institute: $error");
+        return false;
+      }
+    }
+
+    return true;
   }
 }

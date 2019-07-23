@@ -26,11 +26,25 @@ class ParticipantBloc {
   }
 
   Future<bool> changeProfilePicture(File image) async {
-      _isLoading.sink.add(true);
-      final isSucces = await _participantRepository.changeProfilePicture(image);
-      _changeParticipant(_participant.value);
-      _isLoading.sink.add(false);
-      return isSucces;
+    _isLoading.sink.add(true);
+    final isSucces = await _participantRepository.changeProfilePicture(image);
+    _changeParticipant(_participant.value);
+    _isLoading.sink.add(false);
+    return isSucces;
+  }
+
+  Future<bool> editParticipantProfile(String name, String institute, String email) async {
+    if (name == null || name == "" || institute == null || institute == "" || email == null || email == "") return false;
+
+    _isLoading.sink.add(true);
+
+    final isSucces = await _participantRepository.editParticipantProfile(name, institute, email);
+
+    if (isSucces) fetchParticipant();
+
+    _isLoading.sink.add(false);
+    
+    return isSucces;
   }
 
   void onSignOut() {

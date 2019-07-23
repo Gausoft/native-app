@@ -73,7 +73,7 @@ class QuestDetailPage extends StatelessWidget {
             questHeader(context, _imageWidth, quest),
             questMap(_mapHeight, context, quest),
             SizedBox(height: 8),
-            questInfoBox(quest),
+            questInfoBox(quest, false),
             SizedBox(height: 8),
             questDescription(quest),
             SizedBox(height: 16),

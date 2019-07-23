@@ -25,7 +25,7 @@ class QuestPage extends StatelessWidget {
             labelColor: Colors.white,
             tabs: <Widget>[
               Tab(text: "Beschikbaar"),
-              Tab(text: "Mee bezig"),
+              Tab(text: "Bezig"),
             ],
           ),
         ),

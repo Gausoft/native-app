@@ -33,4 +33,24 @@ class ParticipantApi {
         .updateData(data)
         .catchError((e) => print(e));
   }
+
+  Future<bool> editParticipantProfile(String participantId, String name, String institute, String email) async {
+    Map<String, dynamic> data = <String, dynamic>{
+      "name": name,
+      "institute": institute,
+      "email": email,
+    };
+
+    try {
+      await Firestore.instance
+        .collection("Participants")
+        .document(participantId)
+        .updateData(data);
+    } catch(error) {
+      print("An error occurred while editing the profile of the participant: $error");
+      return false;
+    }
+
+    return true;
+  }
 }

@@ -5,7 +5,7 @@ import 'package:gentlestudent/src/blocs/token_bloc.dart';
 import 'package:gentlestudent/src/constants/string_constants.dart';
 import 'package:gentlestudent/src/models/participant.dart';
 import 'package:gentlestudent/src/models/token.dart';
-import 'package:gentlestudent/src/views/authentication/widgets/app_bar.dart';
+import 'package:gentlestudent/src/views/main/user/profile_page/edit_profile_page/edit_profile_page.dart';
 import 'package:gentlestudent/src/views/main/user/profile_page/token_page/token_page.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +19,15 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
+  void _navigateToEditProfilePage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => EditProfilePage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final _participantBloc = Provider.of<ParticipantBloc>(context);
@@ -28,7 +37,23 @@ class ProfilePage extends StatelessWidget {
     _tokenBloc.fetchTokens();
 
     return Scaffold(
-      appBar: appBar("Profiel"),
+      appBar: AppBar(
+      centerTitle: true,
+      title: Text(
+        "Profiel",
+        style: TextStyle(color: Colors.white),
+      ),
+      iconTheme: IconThemeData(
+        color: Colors.white,
+      ),
+      actions: <Widget>[
+        IconButton(
+          onPressed: () => _navigateToEditProfilePage(context),
+          icon: Icon(Icons.edit),
+          tooltip: "Klik hier om je profiel te bewerken",
+        ),
+      ],
+    ),
       body: Container(
         width: double.infinity,
         child: SingleChildScrollView(
