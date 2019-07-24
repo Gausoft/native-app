@@ -14,7 +14,11 @@ class NewsBloc {
     fetchNews();
   }
 
-  Future<void> fetchNews() async => _changeNews(await _newsRepository.news);
+  Future<void> fetchNews() async {
+    List<News> news = await _newsRepository.news;
+    news.sort((n1, n2) => n1.published.compareTo(n2.published));
+    _changeNews(news.reversed.toList());
+  }
 
   void dispose() {
     _news.close();

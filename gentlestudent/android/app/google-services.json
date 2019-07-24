@@ -43,7 +43,7 @@
               "client_id": "52934623602-emd089q2pgrnalk81u29o9eodel9h6tj.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "gent.gentlestudent.gentlestudent"
+                "bundle_id": "gent.gentle.student"
               }
             }
           ]
@@ -54,7 +54,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:52934623602:android:e365544172319ad3",
         "android_client_info": {
-          "package_name": "gent.gentlestudent.gentlestudent"
+          "package_name": "gent.gentle.student"
         }
       },
       "oauth_client": [
@@ -79,7 +79,7 @@
               "client_id": "52934623602-emd089q2pgrnalk81u29o9eodel9h6tj.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "gent.gentlestudent.gentlestudent"
+                "bundle_id": "gent.gentle.student"
               }
             }
           ]

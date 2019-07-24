@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 class QuestUtils {
   static Image chooseQuestTakerLogo(String questTakerName) {
+    if (questTakerName == null || questTakerName == "") return Image.asset("assets/quests/icons/qt_icon_sword.png");
+    
     switch (questTakerName.toLowerCase().substring(0, 1) ?? "") {
       case 'a':
       case 'b':

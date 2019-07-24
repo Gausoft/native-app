@@ -3,7 +3,6 @@ import 'package:gentlestudent/src/constants/color_constants.dart';
 import 'package:gentlestudent/src/constants/string_constants.dart';
 import 'package:gentlestudent/src/utils/web_launcher_utils.dart';
 import 'package:gentlestudent/src/views/authentication/widgets/app_bar.dart';
-import 'package:gentlestudent/src/views/main/information/experiences/experiences_page.dart';
 import 'package:gentlestudent/src/views/main/information/news/news_page.dart';
 import 'package:gentlestudent/src/views/main/information/tutorial/tutorial_page.dart';
 
@@ -27,15 +26,6 @@ class InformationPage extends StatelessWidget {
     );
   }
 
-  void _navigateToExperiencesPage(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => ExperiencesPage(),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,11 +45,6 @@ class InformationPage extends StatelessWidget {
           informationListTile(
             "Tutorial",
             () => _navigateToTutorialPage(context),
-            context,
-          ),
-          informationListTile(
-            "Ervaringen",
-            () => _navigateToExperiencesPage(context),
             context,
           ),
           informationListTile(
