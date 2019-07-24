@@ -1,16 +1,28 @@
-# gentlestudent
+# Welcome to Gentlestudent app for Android & iOS!
 
-A new Flutter project.
+This is the GitHub repository for the mobile applciation of Gentlestudent, an Android & iOS application for students to engage in informal learning opportunities outside of school. When students finishes a learning opportunity, they are rewarded with open badges that represent the skill or knowledge the students acquired.
 
-## Getting Started
+## Content
 
-This project is a starting point for a Flutter application.
+> - [Creator](#creator)
+> - [Technology](#technology)
+> - [Download](#download)
 
-A few resources to get you started if this is your first Flutter project:
+## Creator
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+| Name     | GitHub                        | Email address                       |
+| :---     | :---                          | :---                                |
+| De Coninck Bram | <https://github.com/BramDC3> | [bram@bramdeconinck.com](mailto:bram@bramdeconinck.com) |
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Technology
+
+The mobile application for Gentlestudent is created with [Flutter](https://flutter.dev/), a cross-platform mobile application development framework created by Google. The app uses the BLoC pattern for manage the state and uses the Provider package for dependency injection. The backend for the app was made with [Google Firebase](https://firebase.google.com/).
+
+The mobile application for Gentlestudent is very open, it's open-sourced and it supports:
+> - Open Street Map
+> - Open Recognition
+> - Open Badges
+
+## Download
+
+Gentlestudent is available in the Google Play Store. [Download it here](https://play.google.com/store/apps/details?id=com.bramdeconinck.technologysalesmantoolkit)!
