@@ -18,7 +18,7 @@ This is the GitHub repository for the mobile applciation of Gentlestudent, an An
 
 The mobile application for Gentlestudent is created with [Flutter](https://flutter.dev/), a cross-platform mobile application development framework created by Google. The app uses the BLoC pattern for manage the state and uses the Provider package for dependency injection. The backend for the app was made with [Google Firebase](https://firebase.google.com/).
 
-The mobile application for Gentlestudent is very open, it's open-sourced and it supports:
+The mobile application for Gentlestudent is very open, it's open sourced and it supports:
 > - Open Street Map
 > - Open Recognition
 > - Open Badges
