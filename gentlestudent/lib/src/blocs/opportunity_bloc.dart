@@ -12,7 +12,7 @@ import 'package:gentlestudent/src/repositories/opportunities_repository.dart';
 import 'package:latlong/latlong.dart';
 import 'package:rxdart/rxdart.dart';
 
-final double _notificationRange = 10.0;
+final double _notificationRange = 20.0;
 final Distance _distance = Distance();
 
 class OpportunityBloc {

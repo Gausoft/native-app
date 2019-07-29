@@ -102,18 +102,19 @@ class MyQuestPage extends StatelessWidget {
                   tooltip: "Maak een quest",
                 ),
               ]
-            : <Widget>[
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.edit),
-                  tooltip: "Bewerk je quest",
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.delete),
-                  tooltip: "Verwijder je quest",
-                ),
-              ],
+            : [],
+            // : <Widget>[
+            //     IconButton(
+            //       onPressed: () {},
+            //       icon: Icon(Icons.edit),
+            //       tooltip: "Bewerk je quest",
+            //     ),
+            //     IconButton(
+            //       onPressed: () {},
+            //       icon: Icon(Icons.delete),
+            //       tooltip: "Verwijder je quest",
+            //     ),
+            //   ],
       );
 
   Widget noQuestBody() => Container(
