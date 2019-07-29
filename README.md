@@ -1,6 +1,8 @@
 # Gentlestudent
 Gentlestudent is an application that allows learners to engage in learning opportunities. Companies can issue a learning opportunities and learners can choose to participate. After completing a learning opportunity, the learner is rewarded with an open badge, which is a verifiable record of their learning. This way, Gentlestudent stimulates informal learning and teaches valuable lessons about community life and social engagement.
 
+Click [here](https://osoc19.github.io/gentlestudent-web) to navigate to the GitHub page.
+
 ## Contents
 - [Installation Guide](#installation-guide)
 - [Deployment](#deployment)
@@ -34,9 +36,9 @@ Quests are in an early stage of development and may contain bugs. The version of
 ## Possible Future
 Gentlestudent is not finished yet. Open Summer of code 2019 comes to an end and we still have some ideas which might be interesting for the future of this application. In this section we will focus on the Quest part of Gentlestudent. 
 
-- Right now, users can get tokens for finishing quests. Those tokens don't really have any value right now. A possible improvement for the future might be a progress system. After reaching a certain amount of tokens, users can trade them for an Open Badge which contains a reference to all quests that user did. 
+- Right now, users can get tokens for finishing quests. Those tokens don't really have any value at the moment. A possible improvement for the future might be a progress system. After reaching a certain amount of tokens, users can trade them for an Open Badge which contains a reference to all quests that user did. 
 
-- Right now, quests only have one icon. In the future it can be interesting if users can create their own quest icon, or at least be able to pick an icon from some presets. This can add a personal touch to the whole questing part.
+- In this stage of the project, quests only have one icon. In the future it can be interesting if users can create their own quest icon, or at least be able to pick an icon from some presets. This can add a personal touch to the whole questing part.
 
 ## Used Tools and Frameworks
 - [Flutter](https://flutter.dev/) for the mobile application.
@@ -59,6 +61,6 @@ This project is MIT licensed. View [LICENSE](./LICENSE) for details.
 ## References
 - [Web application repository](https://github.com/oSoc19/gentlestudent-web)
 - [oSoc19 website](https://2019.summerofcode.be/2019/gentlestudent)
-- [Artevelde University College documentation](https://drive.google.com/drive/folders/1vkDLn_qmJT_vRxGx8hoCRRXEcHTxpjwi)
+- [Artevelde University of Applied Sciences documentation](https://drive.google.com/drive/folders/1vkDLn_qmJT_vRxGx8hoCRRXEcHTxpjwi)
 - [oSoc18 code repository](https://github.com/oSoc18/gentlestudent)
 - [Badgr API documentation](https://api.badgr.io/)
