@@ -1,7 +1,7 @@
 name: gentlestudent
-description: A new Flutter project.
+description: Gentlestudent allows students to engage in informal learning opportunities outside of school and rewards them with open badges.
 
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
@@ -77,17 +77,17 @@ flutter:
   uses-material-design: true
 
   assets:
-  - assets/images/logo/gentlestudent_logo.png
+    - assets/images/logo/gentlestudent_logo.png
 
-  - assets/images/tutorial/beacon.png
-  - assets/images/tutorial/bluetooth.png
-  - assets/images/tutorial/challenge.png
+    - assets/images/tutorial/beacon.png
+    - assets/images/tutorial/bluetooth.png
+    - assets/images/tutorial/challenge.png
 
-  - assets/quests/icons/qt_icon_arrow.png
-  - assets/quests/icons/qt_icon_helmet.png
-  - assets/quests/icons/qt_icon_shield.png
-  - assets/quests/icons/qt_icon_sword.png
-  - assets/quests/icons/qt_icon_wizard.png
+    - assets/quests/icons/qt_icon_arrow.png
+    - assets/quests/icons/qt_icon_helmet.png
+    - assets/quests/icons/qt_icon_shield.png
+    - assets/quests/icons/qt_icon_sword.png
+    - assets/quests/icons/qt_icon_wizard.png
 
   fonts:
     - family: NeoSansPro
