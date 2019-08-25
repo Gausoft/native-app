@@ -24,6 +24,8 @@
 	<string>We hebben je locatie nodig om meldingen te sturen van leerkansen in de buurt.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>We hebben je locatie nodig om meldingen te sturen van leerkansen in de buurt.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We hebben toegang nodig tot je afbeeldingen zodat je je profielfoto kunt instellen.</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
