@@ -28,11 +28,21 @@ class Address {
       addressId: snapshot.documentID,
       bus: data['bus'],
       city: data['city'],
-      housenumber: data['housenumber'].runtimeType == int ? data['housenumber'] : 0,
-      postalcode: data['postalcode'].runtimeType == int ? data['postalcode'] : 0,
+      housenumber:
+          data['housenumber'].runtimeType == int ? data['housenumber'] : 0,
+      postalcode:
+          data['postalcode'].runtimeType == int ? data['postalcode'] : 0,
       street: data['street'],
-      latitude: data['latitude'],
-      longitude: data['longitude'],
+      latitude: data['latitude'].runtimeType == double
+          ? data['latitude']
+          : data['latitude'] != null
+              ? double.tryParse(data['latitude'])
+              : null,
+      longitude: data['longitude'].runtimeType == double
+          ? data['longitude']
+          : data['longitude'] != null
+              ? double.tryParse(data['longitude'])
+              : null,
     );
   }
 }
