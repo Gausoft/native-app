@@ -93,11 +93,11 @@ class QuestRepository {
     return isSucces;
   }
 
-  Future<bool> createQuest(String title, String description, String email, String phone, double latitude, double longitude) async {
+  Future<bool> createQuest(String title, String description, String email, double latitude, double longitude) async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     if (user == null || (_currentQuest != null && _currentQuest.questId != null)) return false;
 
-    await _questApi.createQuest(user, title, description, email, phone, latitude, longitude);
+    await _questApi.createQuest(user, title, description, email, latitude, longitude);
     await _fetchCurrentQuestOfUser();
     return _currentQuest != null && _currentQuest.questId!= null;
   }

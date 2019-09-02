@@ -26,8 +26,6 @@ Widget questInfoBox(Quest quest, [bool isQuestTaker = true]) => Padding(
                   questCreated(quest),
                   SizedBox(height: 8),
                   questEmail(quest),
-                  SizedBox(height: 8),
-                  questPhone(quest),
                 ],
         ),
       ),
@@ -101,41 +99,6 @@ Widget questEmail(Quest quest) => Row(
                       quest.emailAddress, "Vraag over quest: '${quest.title}'"),
                   child: Text(
                     "${quest.emailAddress}",
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.lightBlue,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                ),
-        ),
-      ],
-    );
-
-Widget questPhone(Quest quest) => Row(
-      children: <Widget>[
-        Text(
-          "GSM-nummer: ",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
-            color: Colors.lightBlue,
-          ),
-        ),
-        Expanded(
-          child: quest.phoneNumber == ""
-              ? Text(
-                  "/",
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.lightBlue,
-                  ),
-                )
-              : GestureDetector(
-                  onTap: () =>
-                      WebLauncherUtils.makePhoneCall(quest.phoneNumber),
-                  child: Text(
-                    "${quest.phoneNumber}",
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.lightBlue,

@@ -70,8 +70,6 @@ class _CreateQuestPageState extends State<CreateQuestPage> {
               SizedBox(height: 10),
               questEmailField(),
               SizedBox(height: 10),
-              questPhoneNumberField(),
-              SizedBox(height: 10),
               questLatitudeField(_userLocation?.latitude ?? null),
               SizedBox(height: 10),
               questLongitudeField(_userLocation?.longitude ?? null),
@@ -139,30 +137,6 @@ class _CreateQuestPageState extends State<CreateQuestPage> {
             decoration: InputDecoration(
               labelText: 'E-mailadres',
               hintText: 'naam@student.arteveldehs.be',
-              errorText: snapshot.error,
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 12,
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-          );
-        },
-      );
-
-  Widget questPhoneNumberField() => StreamBuilder(
-        stream: _createQuestBloc.phone,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          return TextField(
-            textCapitalization: TextCapitalization.sentences,
-            keyboardType: TextInputType.phone,
-            onChanged: _createQuestBloc.changePhone,
-            maxLength: 10,
-            decoration: InputDecoration(
-              labelText: 'GSM-nummer (zonder spaties)',
-              hintText: '0499999999',
               errorText: snapshot.error,
               contentPadding: EdgeInsets.symmetric(
                 horizontal: 20,

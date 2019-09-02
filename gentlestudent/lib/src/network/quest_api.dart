@@ -138,14 +138,13 @@ class QuestApi {
   }
 
   Future<void> createQuest(FirebaseUser user, String title, String description,
-      String email, String phone, double latitude, double longitude) async {
+      String email, double latitude, double longitude) async {
     Map<String, dynamic> data = <String, dynamic>{
       "created": Timestamp.now(),
       "description": description,
       "emailAddress": email,
       "latitude": latitude,
       "longitude": longitude,
-      "phoneNumber": phone,
       "questGiver": user.displayName,
       "questGiverId": user.uid,
       "questStatus": 0,
