@@ -140,9 +140,9 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Expanded(
               flex: 3,
-              child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(vertical: 12),
-                child: Center(
+              child: Center(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(vertical: 12),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
@@ -233,7 +233,9 @@ class _LoginPageState extends State<LoginPage> {
               hintText: '**********',
               errorText: snapshot.error,
               suffixIcon: IconButton(
-                icon: _isObscured ? Icon(Icons.visibility_off) : Icon(Icons.visibility),
+                icon: _isObscured
+                    ? Icon(Icons.visibility_off)
+                    : Icon(Icons.visibility),
                 onPressed: _toggleIsObscured,
               ),
               contentPadding: EdgeInsets.symmetric(
