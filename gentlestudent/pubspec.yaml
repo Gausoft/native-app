@@ -79,9 +79,9 @@ flutter:
   assets:
     - assets/images/logo/gentlestudent_logo.png
 
-    - assets/images/tutorial/beacon.png
-    - assets/images/tutorial/bluetooth.png
+    - assets/images/tutorial/map.png
     - assets/images/tutorial/challenge.png
+    - assets/images/tutorial/location.jpg
 
     - assets/quests/icons/qt_icon_arrow.png
     - assets/quests/icons/qt_icon_helmet.png

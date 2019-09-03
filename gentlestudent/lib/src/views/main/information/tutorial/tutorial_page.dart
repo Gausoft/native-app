@@ -23,19 +23,19 @@ class TutorialPage extends StatelessWidget {
   final List<PageViewModel> _pages = [
     tutorialPageViewModel(
       firstTutorialBackgroundColor,
-      'assets/images/tutorial/bluetooth.png',
-      'assets/images/tutorial/bluetooth.png',
-      'Zet je bluetooth aan, het verbruikt niet zoveel energie!',
-      'Bluetooth',
-      400,
-      400,
+      'assets/images/tutorial/location.jpg',
+      'assets/images/tutorial/location.jpg',
+      'Zet je locatievoorzieningen aan, het verbruikt niet zoveel energie!',
+      'Locatie',
+      285,
+      285,
     ),
     tutorialPageViewModel(
       secondTutorialBackgroundColor,
-      'assets/images/tutorial/beacon.png',
-      'assets/images/tutorial/beacon.png',
-      'Scan om te zien of er beacons in de buurt zijn.',
-      'Scannen',
+      'assets/images/tutorial/map.png',
+      'assets/images/tutorial/map.png',
+      'Kijk op de kaart om te zien of er een leerkans in de buurt is.',
+      'Kaart',
       285,
       285,
     ),
@@ -43,7 +43,7 @@ class TutorialPage extends StatelessWidget {
       thirdTutorialBackgroundColor,
       'assets/images/tutorial/challenge.png',
       'assets/images/tutorial/challenge.png',
-      'Ga de uitdaging aan!',
+      'Je krijgt een melding van zodra je in de buurt komt. Ga de uitdaging aan!',
       'Uitdaging',
       285,
       285,
@@ -55,18 +55,18 @@ class TutorialPage extends StatelessWidget {
     return Scaffold(
       body: Builder(
         builder: (context) => IntroViewsFlutter(
-              _pages,
-              onTapDoneButton: shouldGoToMainScreen
-                  ? () => _navigateToMainPage(context)
-                  : Navigator.of(context).pop,
-              showSkipButton: true,
-              skipText: Text("Overslaan"),
-              doneText: Text("Klaar"),
-              pageButtonTextStyles: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-              ),
-            ),
+          _pages,
+          onTapDoneButton: shouldGoToMainScreen
+              ? () => _navigateToMainPage(context)
+              : Navigator.of(context).pop,
+          showSkipButton: true,
+          skipText: Text("Overslaan"),
+          doneText: Text("Klaar"),
+          pageButtonTextStyles: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+          ),
+        ),
       ),
     );
   }
