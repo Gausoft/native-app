@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:background_location/background_location.dart';
 import 'package:gentlestudent/src/models/user_location.dart';
 import 'package:location/location.dart';
 
@@ -30,6 +31,12 @@ class LocationService {
     // Request permission to use the location of the user.
     location.requestPermission().then((granted) {
       if (granted) {
+        // Start location service in the background.
+        BackgroundLocation.startLocationService();
+        BackgroundLocation.getLocationUpdates((location) {
+          print(location);
+        });
+
         // If granted listen for location changes.
         location.onLocationChanged().listen((locationData) {
           if (locationData != null) {

@@ -57,6 +57,9 @@ dependencies:
   # Used to calculate distance between coordinates.
   latlong: ^0.6.1
 
+  # Used to get location updates in the background.
+  background_location: ^0.0.7
+
   # Used for taking pictures and using the gallery of a user.
   image_picker: ^0.6.0+11
 
