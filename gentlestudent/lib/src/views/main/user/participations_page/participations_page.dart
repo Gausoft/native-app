@@ -38,111 +38,132 @@ class ParticipationsPage extends StatelessWidget {
               ),
             ];
           },
-          body: StreamBuilder(
-            stream: _opportunityBloc.opportunities,
-            builder: (BuildContext context,
-                AsyncSnapshot<List<Opportunity>> opportunitiesSnapshot) {
-              if (!opportunitiesSnapshot.hasData) {
-                return Container(
-                  child: loadingSpinner(),
-                );
-              }
-
-              if (opportunitiesSnapshot.data.isEmpty) {
-                return Container(
-                  child: Text(
-                    "Er zijn momenteel geen leerkansen beschikbaar",
-                  ),
-                );
-              }
-
-              return TabBarView(
-                children: <Widget>[
-                  StreamBuilder(
-                    stream: _participationBloc.approvedParticipations,
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<Participation>>
-                            approvedParticipationsSnapshot) {
-                      if (!approvedParticipationsSnapshot.hasData) {
-                        return Container(
-                          child: loadingSpinner(),
-                        );
-                      }
-
-                      if (approvedParticipationsSnapshot.data.isEmpty) {
-                        return Container(
-                          padding: EdgeInsets.all(24),
-                          child: Center(
-                            child: Text(
-                              "Er zijn momenteel geen leerkansen waarvoor je goedgekeurd bent",
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        );
-                      }
-
-                      return ListView.builder(
-                        padding: EdgeInsets.all(8),
-                        itemCount: approvedParticipationsSnapshot.data.length,
-                        itemBuilder: (_, int index) {
-                          return OpportunityListItem(
-                            opportunitiesSnapshot.data.firstWhere(
-                              (o) =>
-                                  o.opportunityId ==
-                                  approvedParticipationsSnapshot
-                                      .data[index].opportunityId,
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                  StreamBuilder(
-                    stream: _participationBloc.requestedParticipations,
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<Participation>>
-                            requestedParticipationsSnapshot) {
-                      if (!requestedParticipationsSnapshot.hasData) {
-                        return Container(
-                          child: loadingSpinner(),
-                        );
-                      }
-
-                      if (requestedParticipationsSnapshot.data.isEmpty) {
-                        return Container(
-                          padding: EdgeInsets.all(24),
-                          child: Center(
-                            child: Text(
-                              "Er zijn momenteel geen leerkansen waarvoor je geregistreerd bent",
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        );
-                      }
-
-                      return ListView.builder(
-                        padding: EdgeInsets.all(8),
-                        itemCount: requestedParticipationsSnapshot.data.length,
-                        itemBuilder: (_, int index) {
-                          return OpportunityListItem(
-                            opportunitiesSnapshot.data.firstWhere(
-                              (o) =>
-                                  o.opportunityId ==
-                                  requestedParticipationsSnapshot
-                                      .data[index].opportunityId,
-                            ),
-                            true,
-                            requestedParticipationsSnapshot.data[index],
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ],
-              );
-            },
+          body: _buildBody(
+            _opportunityBloc,
+            _participationBloc,
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildBody(
+    OpportunityBloc opportunityBloc,
+    ParticipationBloc participationBloc,
+  ) =>
+      TabBarView(
+        children: <Widget>[
+          _buildApprovedParticipations(
+            opportunityBloc,
+            participationBloc,
+          ),
+          _buildRequestedParticipations(
+            opportunityBloc,
+            participationBloc,
+          ),
+        ],
+      );
+
+  Widget _buildApprovedParticipations(
+    OpportunityBloc opportunityBloc,
+    ParticipationBloc participationBloc,
+  ) =>
+      StreamBuilder(
+        stream: participationBloc.approvedParticipations,
+        builder: (context, AsyncSnapshot<List<Participation>> snapshot) {
+          if (!snapshot.hasData) {
+            return Container(
+              child: loadingSpinner(),
+            );
+          }
+
+          if (snapshot.data.isEmpty) {
+            return Container(
+              padding: EdgeInsets.all(24),
+              child: Center(
+                child: Text(
+                  "Er zijn momenteel geen leerkansen waarvoor je goedgekeurd bent",
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            );
+          }
+
+          return ListView.builder(
+            padding: EdgeInsets.all(8),
+            itemCount: snapshot.data.length,
+            itemBuilder: (_, int index) {
+              return FutureBuilder(
+                future: opportunityBloc.getOpportunityById(snapshot.data[index].opportunityId),
+                builder: (context, AsyncSnapshot<Opportunity> snapshot) {
+                  if (!snapshot.hasData || snapshot.data.title == null || snapshot.data.title.isEmpty) {
+                    return _opportunityLoadingContainer(context);
+                  }
+
+                  return OpportunityListItem(snapshot.data);
+                },
+              );
+            },
+          );
+        },
+      );
+
+  Widget _buildRequestedParticipations(
+    OpportunityBloc opportunityBloc,
+    ParticipationBloc participationBloc,
+  ) =>
+      StreamBuilder(
+        stream: participationBloc.requestedParticipations,
+        builder: (context, AsyncSnapshot<List<Participation>> snapshot) {
+          if (!snapshot.hasData) {
+            return Container(
+              child: loadingSpinner(),
+            );
+          }
+
+          if (snapshot.data.isEmpty) {
+            return Container(
+              padding: EdgeInsets.all(24),
+              child: Center(
+                child: Text(
+                  "Er zijn momenteel geen leerkansen waarvoor je geregistreerd bent",
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            );
+          }
+
+          return ListView.builder(
+            padding: EdgeInsets.all(8),
+            itemCount: snapshot.data.length,
+            itemBuilder: (_, int index) {
+              return FutureBuilder(
+                future: opportunityBloc.getOpportunityById(snapshot.data[index].opportunityId),
+                builder: (context, AsyncSnapshot<Opportunity> snapshot) {
+                  if (!snapshot.hasData || snapshot.data.title == null || snapshot.data.title.isEmpty) {
+                    return _opportunityLoadingContainer(context);
+                  }
+
+                  return OpportunityListItem(snapshot.data);
+                },
+              );
+            },
+          );
+        },
+      );
+
+  Widget _opportunityLoadingContainer(BuildContext context) {
+    final height = MediaQuery.of(context).size.width / 5;
+
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      margin: EdgeInsets.only(bottom: 8),
+      elevation: 3,
+      child: Container(
+        height: height,
+        margin: EdgeInsets.fromLTRB(10, 10, 16, 10),
       ),
     );
   }

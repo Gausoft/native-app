@@ -12,9 +12,69 @@ import 'package:gentlestudent/src/widgets/loading_spinner.dart';
 import 'package:provider/provider.dart';
 
 class BackpackPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final _assertionBloc = Provider.of<AssertionBloc>(context);
+    final _opportunityBloc = Provider.of<OpportunityBloc>(context);
+    final _badgeWidth = MediaQuery.of(context).size.width / 5;
+
+    return Scaffold(
+      appBar: appBar("Backpack"),
+      body: _buildBody(
+        _assertionBloc,
+        _opportunityBloc,
+        _badgeWidth,
+      ),
+    );
+  }
+
+  Widget _buildBody(
+    AssertionBloc assertionBloc,
+    OpportunityBloc opportunityBloc,
+    double badgeWidth,
+  ) =>
+      Container(
+        child: StreamBuilder(
+          stream: assertionBloc.assertions,
+          builder: (context, AsyncSnapshot<List<Assertion>> snapshot) {
+            if (!snapshot.hasData) {
+              return loadingSpinner();
+            }
+
+            if (snapshot.data.isEmpty) {
+              return Center(
+                child: Text("Je hebt nog geen badges behaald"),
+              );
+            }
+
+            return FutureBuilder(
+              future: _buildBadges(
+                snapshot.data,
+                opportunityBloc,
+                badgeWidth,
+                context,
+              ),
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<Widget>> badgesSnapshot) {
+                if (!badgesSnapshot.hasData) {
+                  return loadingSpinner();
+                }
+
+                return GridView.count(
+                  crossAxisCount: 3,
+                  childAspectRatio: 0.7,
+                  children: <Widget>[
+                    ...badgesSnapshot.data,
+                  ],
+                );
+              },
+            );
+          },
+        ),
+      );
+
   Future<List<Widget>> _buildBadges(
     List<Assertion> assertions,
-    List<Opportunity> opportunities,
     OpportunityBloc bloc,
     double badgeWidth,
     BuildContext context,
@@ -22,12 +82,12 @@ class BackpackPage extends StatelessWidget {
     List<Widget> badges = [];
 
     for (int i = 0; i < assertions.length; i++) {
-      Opportunity opportunity =
+      final opportunity =
           await bloc.getOpportunityByBadgeId(assertions[i].openBadgeId);
       Badge badge = await bloc.getBadgeOfOpportunity(opportunity);
       Issuer issuer = await bloc.getIssuerOfOpportunity(opportunity);
       badges.add(
-        gridBadge(
+        _gridBadge(
           context,
           opportunity,
           badge,
@@ -41,69 +101,7 @@ class BackpackPage extends StatelessWidget {
     return badges;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final _assertionBloc = Provider.of<AssertionBloc>(context);
-    final _opportunityBloc = Provider.of<OpportunityBloc>(context);
-    final _badgeWidth = MediaQuery.of(context).size.width / 5;
-
-    return Scaffold(
-      appBar: appBar("Backpack"),
-      body: Container(
-        child: StreamBuilder(
-          stream: _assertionBloc.assertions,
-          builder: (BuildContext context,
-              AsyncSnapshot<List<Assertion>> assertionsSnapshot) {
-            if (!assertionsSnapshot.hasData) {
-              return loadingSpinner();
-            }
-
-            if (assertionsSnapshot.data.isEmpty) {
-              return Center(
-                child: Text("Je hebt nog geen badges behaald"),
-              );
-            }
-
-            return StreamBuilder(
-              stream: _opportunityBloc.opportunities,
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<Opportunity>> opportunitiesSnapshot) {
-                if (!opportunitiesSnapshot.hasData) {
-                  return loadingSpinner();
-                }
-
-                return FutureBuilder(
-                  future: _buildBadges(
-                    assertionsSnapshot.data,
-                    opportunitiesSnapshot.data,
-                    _opportunityBloc,
-                    _badgeWidth,
-                    context,
-                  ),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<List<Widget>> badgesSnapshot) {
-                    if (!badgesSnapshot.hasData) {
-                      return loadingSpinner();
-                    }
-
-                    return GridView.count(
-                      crossAxisCount: 3,
-                      childAspectRatio: 0.7,
-                      children: <Widget>[
-                        ...badgesSnapshot.data,
-                      ],
-                    );
-                  },
-                );
-              },
-            );
-          },
-        ),
-      ),
-    );
-  }
-
-  Widget gridBadge(
+  Widget _gridBadge(
     BuildContext context,
     Opportunity opportunity,
     Badge badge,
@@ -112,7 +110,13 @@ class BackpackPage extends StatelessWidget {
     double badgeWidth,
   ) =>
       InkWell(
-        onTap: () => displayBadgeDialog(context, assertion, badge, opportunity, issuer),
+        onTap: () => displayBadgeDialog(
+          context,
+          assertion,
+          badge,
+          opportunity,
+          issuer,
+        ),
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
           child: Column(
@@ -124,8 +128,9 @@ class BackpackPage extends StatelessWidget {
                 width: badgeWidth,
                 height: badgeWidth,
                 placeholder: (context, message) => loadingSpinner(),
-                errorWidget: (context, message, object) =>
-                    Center(child: Icon(Icons.error)),
+                errorWidget: (context, message, object) => Center(
+                  child: Icon(Icons.error),
+                ),
               ),
               SizedBox(height: 8),
               Center(

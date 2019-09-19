@@ -5,6 +5,7 @@ import 'package:gentlestudent/src/blocs/opportunity_bloc.dart';
 import 'package:gentlestudent/src/blocs/participant_bloc.dart';
 import 'package:gentlestudent/src/blocs/participation_bloc.dart';
 import 'package:gentlestudent/src/models/badge.dart';
+import 'package:gentlestudent/src/models/enums/authority.dart';
 import 'package:gentlestudent/src/models/enums/difficulty.dart';
 import 'package:gentlestudent/src/models/enums/status.dart';
 import 'package:gentlestudent/src/models/issuer.dart';
@@ -112,7 +113,13 @@ class OpportunityDetailPage extends StatelessWidget {
           ),
           opportunityShortDescription(),
           opportunityLongDescription(),
-          enrollButton(_participationBloc, _assertionBloc, _opportunityBloc),
+          opportunity.authority == Authority.APPROVED
+              ? enrollButton(
+                  _participationBloc,
+                  _assertionBloc,
+                  _opportunityBloc,
+                )
+              : Container(),
         ],
       ),
     );
@@ -169,7 +176,8 @@ class OpportunityDetailPage extends StatelessWidget {
               () => showRegistrationDialog(
                 context,
                 opportunity,
-                () => _enrollInOpportunity(participationBloc, context, opportunityBloc),
+                () => _enrollInOpportunity(
+                    participationBloc, context, opportunityBloc),
               ),
             );
           }

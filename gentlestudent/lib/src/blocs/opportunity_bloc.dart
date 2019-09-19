@@ -45,15 +45,19 @@ class OpportunityBloc {
     changeShowQuestsFilter(true);
   }
 
-  Future _fetchOpportunities() async {
+  Future<void> _fetchOpportunities() async {
     List<Opportunity> opportunities = await _opportunitiesRepository.opportunities;
-    List<Opportunity> filteredOpportunities = opportunities;
-
     _changeOpportunities(opportunities);
-    _changeFilteredOpportunities(filteredOpportunities);
+    filterOpportunities();
   }
 
-  Future<Opportunity> getOpportunityById(String id) async => _opportunitiesRepository.fetchOpportunityById(id);
+  Future<Opportunity> getOpportunityById(String id) async {
+    final opportunity = _opportunitiesRepository.fetchOpportunityById(id);
+
+    _fetchOpportunities();
+
+    return opportunity;
+  }
 
   Future<Address> getAddressOfOpportunity(Opportunity opportunity) async {
     Address address = await _addressRepository.getAddressById(opportunity.addressId);
@@ -71,11 +75,10 @@ class OpportunityBloc {
   }
 
   Future<Opportunity> getOpportunityByBadgeId(String badgeId) async {
-    if (_opportunities.value == null || _opportunities.value.isEmpty) {
-      await _fetchOpportunities();
-    }
+    final opportunity = await _opportunitiesRepository.fetchOpportunityByBadgeId(badgeId);
 
-    Opportunity opportunity = _opportunities.value.firstWhere((o) => o.badgeId == badgeId);
+    _fetchOpportunities();
+
     return opportunity;
   }
 

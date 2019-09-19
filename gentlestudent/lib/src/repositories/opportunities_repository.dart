@@ -17,16 +17,34 @@ class OpportunitiesRepository {
   }
 
   Future<Opportunity> fetchOpportunityById(String id) async {
-    Opportunity opportunity;
-
     if (_opportunities == null || _opportunities.isEmpty) {
-      opportunity = _opportunities.firstWhere((o) => o.opportunityId == id);
+      await _fetchOpportunities();
     }
 
-    if (opportunity == null) {
-      opportunity = await _opportunityApi.getOpportunityById(id);
+    if (_opportunities.map((o) => o.opportunityId).contains(id)) {
+      return _opportunities.firstWhere((o) => o.opportunityId == id);
     }
 
+    final opportunity = await _opportunityApi.getOpportunityById(id);
+
+    _opportunities.add(opportunity);
+    
+    return opportunity;
+  }
+
+  Future<Opportunity> fetchOpportunityByBadgeId(String badgeId) async {
+    if (_opportunities == null || _opportunities.isEmpty) {
+      await _fetchOpportunities();
+    }
+
+    if (_opportunities.map((o) => o.badgeId).contains(badgeId)) {
+      return _opportunities.firstWhere((o) => o.badgeId == badgeId);
+    }
+
+    final opportunity = await _opportunityApi.getOpportunityByBadgeId(badgeId);
+
+    _opportunities.add(opportunity);
+    
     return opportunity;
   }
 }
